@@ -1,4 +1,5 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update
+});
 
 function preload() {
     game.load.tilemap('ClassicMap', '../assets/RoyalPac-mapV2.json', null, Phaser.Tilemap.TILED_JSON);
@@ -10,18 +11,31 @@ function preload() {
 var map;
 var layer;
 var player;
+var tiles;
+var tileset;
+var cursors;
 
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
-    map = game.add.tilemap('ClassicMap');
+
+    game.stage.backgroundColor = '#787878';
+
+    map = game.add.tilemap('ClassicMap', 'tiles');
+
     map.addTilesetImage('TileSet', 'tiles');
 
+    map.setCollisionBetween(1,136);
+
     layer = map.createLayer('Calque de Tile 1');
+
     layer.resizeWorld();
 
-    player = game.add.sprite(35,game.world.height - 100,'pacman');
+    //game.physics.collide(player, layer);
+    player = game.add.sprite(200,200,'pacman');
 
-    game.physics.arcade.enable(player);
+    game.physics.enable(player);
+
+    player.body.collideWorldBounds = true;
 
     player.animations.add('left', [6, 5, 4], 10, true);
     player.animations.add('right', [9, 8, 7], 10, true);
@@ -32,6 +46,8 @@ function create() {
 }
 
 function update() {
+  game.physics.arcade.collide(player, layer);
+
   if (cursors.left.isDown){
       //  Move to the left
       player.body.velocity.x = -150;
