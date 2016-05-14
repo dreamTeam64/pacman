@@ -4,7 +4,7 @@ function preload() {
     game.load.tilemap('ClassicMap', '../assets/RoyalPac-mapV2.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', '../assets/TileSet.png');
 
-    game.load.spritesheet('pacman','../assets/pacman.png',35,35,5);
+    game.load.spritesheet('pacman','../assets/pacman.png',35,35);
 }
 
 var map;
@@ -23,10 +23,10 @@ function create() {
 
     game.physics.arcade.enable(player);
 
-    player.animations.add('left', [0, 6, 5, 4], 10, true);
-    player.animations.add('right', [0, 9, 8, 7], 10, true);
-    player.animations.add('down', [0, 3, 2, 1], 10, true);
-    player.animations.add('up', [0, 12, 11, 10], 10, true);
+    player.animations.add('left', [6, 5, 4], 10, true);
+    player.animations.add('right', [9, 8, 7], 10, true);
+    player.animations.add('down', [3, 2, 1], 10, true);
+    player.animations.add('up', [12, 11, 10], 10, true);
 
     cursors = game.input.keyboard.createCursorKeys();
 }
@@ -48,13 +48,13 @@ function update() {
       //  Move to the left
       player.body.velocity.y = -150;
       player.body.velocity.x = 0;
-      player.animations.play('right');
+      player.animations.play('up');
   }
   if (cursors.down.isDown){
       //  Move to the left
       player.body.velocity.y = 150;
       player.body.velocity.x = 0;
-      player.animations.play('right');
+      player.animations.play('down');
   }
 
 }
