@@ -17,9 +17,12 @@ app.get('/', function(req, res){
   res.render('RoyalPac.ejs');
 });
 
+app.get('/contact', function(req, res){
+  res.render('contact.ejs');
+});
+
 app.use(function(req, res, next){
-  res.setHeader('Content-Type', 'text/plain');
-  res.send(404, 'ERREUR 404 MEC ! (Coded by Eddy Murhpy ...)!');
+  res.render('error.ejs');
 });
 
 app.listen(8080);
