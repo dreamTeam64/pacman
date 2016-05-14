@@ -6,13 +6,11 @@ function preload() {
 }
 
 var map;
-var layer;
 
 function create() {
 
     map = game.add.tilemap('ClassicMap');
 
-    map.addTilesetImage('297pacman_v2_cc_thumb', 'blueTiles');
 }
 
 function update() {
