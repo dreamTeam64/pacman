@@ -2,11 +2,18 @@ var express = require('express');
 var server = require('http').createServer(app);
 var ejs = require('ejs');
 var app = express();
+var path = require ('path');
 
+/*
+  les chemins statiques commencent au dossier public
+  ie : src="/script/RoyalPac.js" va chercher dans src/public/script/RoyalPac.js
+*/
+console.log(__dirname); //__dirname = /Users/.../pacman/src
 app.use(express.static(__dirname + '/public'));
+
 app.set('view engine', 'ejs');
+
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/public/assets/RoyalPac-mapV2.json');
   res.render('RoyalPac.ejs');
 });
 
