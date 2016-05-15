@@ -50,10 +50,10 @@ function update() {
   game.physics.arcade.collide(player, layer);
   
   //Get Tiles around player 
-  var leftTile = map.getTileWorldXY(player.position.x -20, player.position.y, 25, 25, layer).index;
-  var rightTile = map.getTileWorldXY(player.position.x +20, player.position.y, 25, 25, layer).index;
-  var upTile = map.getTileWorldXY(player.position.x, player.position.y +20, 25, 25, layer).index;
-  var downTile = map.getTileWorldXY(player.position.x, player.position.y -20, 25, 25, layer).index;
+  var leftTile = map.getTileWorldXY(player.position.x -30, player.position.y, 25, 25, layer).index;
+  var rightTile = map.getTileWorldXY(player.position.x +30, player.position.y, 25, 25, layer).index;
+  var upTile = map.getTileWorldXY(player.position.x, player.position.y +30, 25, 25, layer).index;
+  var downTile = map.getTileWorldXY(player.position.x, player.position.y -30, 25, 25, layer).index;
   var isWall;
   
   if (cursors.left.isDown){
