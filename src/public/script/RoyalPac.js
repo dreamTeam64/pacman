@@ -58,7 +58,7 @@ function update() {
   
   if (cursors.left.isDown){
       //  Move to the left
-      isWall = (leftTile == 2);
+      isWall = (leftTile == 1);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -70,7 +70,7 @@ function update() {
   }
   if (cursors.right.isDown){
       //  Move to the right
-      isWall = (rightTile == 2);
+      isWall = (rightTile == 1);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -82,7 +82,7 @@ function update() {
   }
   if (cursors.up.isDown){
       //  Move up
-      isWall = (upTile == 2);
+      isWall = (upTile == 1);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -94,7 +94,7 @@ function update() {
   }
   if (cursors.down.isDown){
       //  Move down
-      isWall = (downTile == 2);
+      isWall = (downTile == 1);
       if (isWall) {
         console.log("it s a wall");
       }
