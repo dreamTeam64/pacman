@@ -11,7 +11,7 @@ monster.prototype.create = function(){
 }
 
 monster.prototype.update = function(){
-  //this.body.velocity.y = 100;
+  //console.log("hello");
 }
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update
