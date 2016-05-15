@@ -52,8 +52,8 @@ function update() {
   //Get Tiles around player 
   var leftTile = map.getTileWorldXY(player.position.x -5, player.position.y, 25, 25, layer).index;
   var rightTile = map.getTileWorldXY(player.position.x +5, player.position.y, 25, 25, layer).index;
-  var upTile = map.getTileWorldXY(player.position.x, player.position.y +5, 25, 25, layer).index;
-  var downTile = map.getTileWorldXY(player.position.x, player.position.y -5, 25, 25, layer).index;
+  var upTile = map.getTileWorldXY(player.position.x, player.position.y -5, 25, 25, layer).index;
+  var downTile = map.getTileWorldXY(player.position.x, player.position.y +5, 25, 25, layer).index;
   var isWall;
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
