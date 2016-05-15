@@ -34,7 +34,7 @@ function create() {
     game.physics.enable(player);
 
     player.body.collideWorldBounds = true;
-    //player.body.setSize(23, 23, 0, 0);
+    //player.body.setSize(25, 25, 0, 0);
     player.animations.add('left', [6, 5, 4], 10, true);
     player.animations.add('right', [9, 8, 7], 10, true);
     player.animations.add('down', [3, 2, 1], 10, true);
@@ -46,10 +46,14 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 
+function canGoDown(player, layer, map){
+  return((map.getTileWorldXY(player.position.x + (25), player.position.y +30, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +30, 25, 25, layer).index == 136));
+}
+
 function update() {
   game.physics.arcade.collide(player, layer);
-  
-  //Get Tiles around player 
+
+  //Get Tiles around player
   var leftTile = map.getTileWorldXY(player.position.x -5, player.position.y, 25, 25, layer).index;
   var rightTile = map.getTileWorldXY(player.position.x +5, player.position.y, 25, 25, layer).index;
   var upTile = map.getTileWorldXY(player.position.x, player.position.y -5, 25, 25, layer).index;
@@ -66,7 +70,7 @@ function update() {
         player.body.velocity.x = -150;
         player.body.velocity.y = 0;
         player.animations.play('left');
-      }  
+      }
   }
   if (cursors.right.isDown){
       //  Move to the right
@@ -103,6 +107,7 @@ function update() {
         player.body.velocity.x = 0;
         player.animations.play('down');
       }
+
   }
 
 }
