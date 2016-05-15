@@ -111,8 +111,9 @@ function update() {
   }
 
 }
+/* DEFINITION DES DIFFERENTS ELEMENTS DU JEU */
 
-monster = function(game,x,y){
+var monster = function(game,x,y){
   Phaser.Sprite.call(this,game,x,y,'star');
 }
 
