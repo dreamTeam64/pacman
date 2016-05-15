@@ -50,10 +50,10 @@ function update() {
   game.physics.arcade.collide(player, layer);
   
   //Get Tiles around player 
-  var leftTile = map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index;
-  var rightTile = map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index;
-  var upTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
-  var downTile = map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index;
+  var leftTile = map.getTileWorldXY(player.position.x -1, player.position.y, 25, 25, layer).index;
+  var rightTile = map.getTileWorldXY(player.position.x +1, player.position.y, 25, 25, layer).index;
+  var upTile = map.getTileWorldXY(player.position.x, player.position.y +1, 25, 25, layer).index;
+  var downTile = map.getTileWorldXY(player.position.x, player.position.y -1, 25, 25, layer).index;
   var isWall;
   
   if (cursors.left.isDown){
@@ -70,21 +70,39 @@ function update() {
   }
   if (cursors.right.isDown){
       //  Move to the right
-      player.body.velocity.x = 150;
-      player.body.velocity.y = 0;
-      player.animations.play('right');
+      isWall = (rightTile == 2);
+      if (isWall) {
+        console.log("it s a wall");
+      }
+      if (!isWall){
+        player.body.velocity.x = 150;
+        player.body.velocity.y = 0;
+        player.animations.play('right');
+      }
   }
   if (cursors.up.isDown){
       //  Move up
-      player.body.velocity.y = -150;
-      player.body.velocity.x = 0;
-      player.animations.play('up');
+      isWall = (upTile == 2);
+      if (isWall) {
+        console.log("it s a wall");
+      }
+      if (!isWall){
+        player.body.velocity.y = -150;
+        player.body.velocity.x = 0;
+        player.animations.play('up');
+      }
   }
   if (cursors.down.isDown){
       //  Move down
-      player.body.velocity.y = 150;
-      player.body.velocity.x = 0;
-      player.animations.play('down');
+      isWall = (downTile == 2);
+      if (isWall) {
+        console.log("it s a wall");
+      }
+      if (!isWall){
+        player.body.velocity.y = 150;
+        player.body.velocity.x = 0;
+        player.animations.play('down');
+      }
   }
 
 }
