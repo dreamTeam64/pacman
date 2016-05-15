@@ -50,15 +50,15 @@ function update() {
   game.physics.arcade.collide(player, layer);
   
   //Get Tiles around player 
-  var leftTile = map.getTileWorldXY(player.position.x -30, player.position.y, 25, 25, layer).index;
-  var rightTile = map.getTileWorldXY(player.position.x +30, player.position.y, 25, 25, layer).index;
-  var upTile = map.getTileWorldXY(player.position.x, player.position.y +30, 25, 25, layer).index;
-  var downTile = map.getTileWorldXY(player.position.x, player.position.y -30, 25, 25, layer).index;
+  var leftTile = map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index;
+  var rightTile = map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index;
+  var upTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
+  var downTile = map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index;
   var isWall;
   
   if (cursors.left.isDown){
       //  Move to the left
-      isWall = (leftTile == 1);
+      isWall = (leftTile == 136);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -70,7 +70,7 @@ function update() {
   }
   if (cursors.right.isDown){
       //  Move to the right
-      isWall = (rightTile == 1);
+      isWall = (rightTile == 136);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -82,7 +82,7 @@ function update() {
   }
   if (cursors.up.isDown){
       //  Move up
-      isWall = (upTile == 1);
+      isWall = (upTile == 136);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -94,7 +94,7 @@ function update() {
   }
   if (cursors.down.isDown){
       //  Move down
-      isWall = (downTile == 1);
+      isWall = (downTile == 136);
       if (isWall) {
         console.log("it s a wall");
       }
