@@ -54,29 +54,31 @@ function update() {
   var rightTile = map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index;
   var upTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var downTile = map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index;
-  //y'a un ptit terminal mais visiblement node app.js ça marche pas comme ça
-  //faut surement modifier le project config, je google it
-  //Trop swagg ce tchat improvisé ahah
+  var noWall;
+  
   if (cursors.left.isDown){
       //  Move to the left
-      player.body.velocity.x = -150;
-      player.body.velocity.y = 0;
-      player.animations.play('left');
+      noWall = (leftTile == 2);
+      if (noWall){
+        player.body.velocity.x = -150;
+        player.body.velocity.y = 0;
+        player.animations.play('left');
+      }  
   }
   if (cursors.right.isDown){
-      //  Move to the left
+      //  Move to the right
       player.body.velocity.x = 150;
       player.body.velocity.y = 0;
       player.animations.play('right');
   }
   if (cursors.up.isDown){
-      //  Move to the left
+      //  Move up
       player.body.velocity.y = -150;
       player.body.velocity.x = 0;
       player.animations.play('up');
   }
   if (cursors.down.isDown){
-      //  Move to the left
+      //  Move down
       player.body.velocity.y = 150;
       player.body.velocity.x = 0;
       player.animations.play('down');
