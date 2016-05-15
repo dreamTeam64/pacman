@@ -1,10 +1,26 @@
+monster = function(game,x,y){
+  Phaser.Sprite.call(this,game,x,y,'star');
+}
+
+monster.prototype = Object.create(Phaser.Sprite.prototype);
+monster.prototype.constructor = monster;
+
+monster.prototype.create = function(){
+  game.physics.enable(this);
+  game.physics.arcade.collide(this, layer);
+}
+
+monster.prototype.update = function(){
+  //this.body.velocity.y = 100;
+}
+
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update
 });
 
 function preload() {
     game.load.tilemap('ClassicMap', '../assets/RoyalPac-mapV2.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', '../assets/TileSet.png');
-
+    game.load.image('star', '../assets/star.png');
     game.load.spritesheet('pacman','../assets/pacman_test.png',25,25,13);
 }
 
@@ -42,6 +58,9 @@ function create() {
     player.animations.add('right', [9, 8, 7], 10, true);
     player.animations.add('down', [3, 2, 1], 10, true);
     player.animations.add('up', [12, 11, 10], 10, true);
+
+    var m_un = new monster(game,200,300);
+    game.add.existing(m_un);
 
     cursors = game.input.keyboard.createCursorKeys();
 }
