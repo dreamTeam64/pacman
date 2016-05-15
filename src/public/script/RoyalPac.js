@@ -58,7 +58,7 @@ function update() {
   
   if (cursors.left.isDown){
       //  Move to the left
-      isWall = (leftTile == 2);
+      isWall = (leftTile == 1);
       if (!isWall){
         player.body.velocity.x = -150;
         player.body.velocity.y = 0;
