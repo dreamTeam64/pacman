@@ -24,7 +24,7 @@ function create() {
 
     map.addTilesetImage('TileSet', 'tiles');
 
-    map.setCollisionBetween(1,136);
+    map.setCollision(1);
 
     layer = map.createLayer('Calque de Tile 1');
 
