@@ -54,12 +54,12 @@ function update() {
   var rightTile = map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index;
   var upTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var downTile = map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index;
-  var noWall;
+  var isWall;
   
   if (cursors.left.isDown){
       //  Move to the left
-      noWall = (leftTile == 2);
-      if (noWall){
+      isWall = (leftTile == 2);
+      if (!isWall){
         player.body.velocity.x = -150;
         player.body.velocity.y = 0;
         player.animations.play('left');
