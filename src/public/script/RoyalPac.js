@@ -50,16 +50,15 @@ function update() {
   game.physics.arcade.collide(player, layer);
   
   //Get Tiles around player 
-  var leftTile = map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index;
-  var rightTile = map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index;
-  var upTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
-  var downTile = map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index;
+  var leftTile = map.getTileWorldXY(player.position.x -5, player.position.y, 25, 25, layer).index;
+  var rightTile = map.getTileWorldXY(player.position.x +5, player.position.y, 25, 25, layer).index;
+  var upTile = map.getTileWorldXY(player.position.x, player.position.y +5, 25, 25, layer).index;
+  var downTile = map.getTileWorldXY(player.position.x, player.position.y -5, 25, 25, layer).index;
   var isWall;
-  
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
       //  Move to the left
-      isWall = game.physics.arcade.collide(player, layer);
+      isWall = (leftTile == 2);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -71,7 +70,7 @@ function update() {
   }
   if (cursors.right.isDown){
       //  Move to the right
-      isWall = game.physics.arcade.collide(player, layer);
+      isWall = (rightTile == 2);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -83,7 +82,7 @@ function update() {
   }
   if (cursors.up.isDown){
       //  Move up
-      isWall = game.physics.arcade.collide(player, layer);
+      isWall = (upTile == 2);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -95,7 +94,7 @@ function update() {
   }
   if (cursors.down.isDown){
       //  Move down
-      isWall = game.physics.arcade.collide(player, layer);
+      isWall = (downTile == 2);
       if (isWall) {
         console.log("it s a wall");
       }
