@@ -24,19 +24,20 @@ function create() {
 
     map.addTilesetImage('TileSet', 'tiles');
 
+    map.setCollision(2);
     map.setCollision(1);
 
     layer = map.createLayer('Calque de Tile 1');
 
     layer.resizeWorld();
 
-    //game.physics.collide(player, layer);
+    game.physics.arcade.collide(player, layer);
     player = game.add.sprite(200,200,'pacman');
 
     game.physics.enable(player);
 
     player.body.collideWorldBounds = true;
-
+    //player.body.setSize(23, 23, 0, 0);
     player.animations.add('left', [6, 5, 4], 10, true);
     player.animations.add('right', [9, 8, 7], 10, true);
     player.animations.add('down', [3, 2, 1], 10, true);
