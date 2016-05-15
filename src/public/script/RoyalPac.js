@@ -71,7 +71,7 @@ function update() {
   }
   if (cursors.right.isDown){
       //  Move to the right
-      isWall = (rightTile == 2);
+      isWall = game.physics.arcade.collide(player, layer);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -83,7 +83,7 @@ function update() {
   }
   if (cursors.up.isDown){
       //  Move up
-      isWall = (upTile == 2);
+      isWall = game.physics.arcade.collide(player, layer);
       if (isWall) {
         console.log("it s a wall");
       }
@@ -95,7 +95,7 @@ function update() {
   }
   if (cursors.down.isDown){
       //  Move down
-      isWall = (downTile == 2);
+      isWall = game.physics.arcade.collide(player, layer);
       if (isWall) {
         console.log("it s a wall");
       }
