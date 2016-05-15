@@ -5,7 +5,7 @@ function preload() {
     game.load.tilemap('ClassicMap', '../assets/RoyalPac-mapV2.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', '../assets/TileSet.png');
 
-    game.load.spritesheet('pacman','../assets/pacman.png',35,35);
+    game.load.spritesheet('pacman','../assets/pacman_test.png',25,25,13);
 }
 
 var map;
