@@ -1,18 +1,3 @@
-monster = function(game,x,y){
-  Phaser.Sprite.call(this,game,x,y,'star');
-}
-
-monster.prototype = Object.create(Phaser.Sprite.prototype);
-monster.prototype.constructor = monster;
-
-monster.prototype.create = function(){
-  game.physics.enable(this);
-  game.physics.arcade.collide(this, layer);
-}
-
-monster.prototype.update = function(){
-  //console.log("hello");
-}
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update
 });
@@ -62,17 +47,18 @@ function create() {
 }
 
 function update() {
-    game.physics.arcade.collide(player, layer);
-
+  game.physics.arcade.collide(player, layer);
+  
+  //Get Tiles around player 
+  var leftTile = map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index;
+  var rightTile = map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index;
+  var upTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
+  var downTile = map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index;
+  //y'a un ptit terminal mais visiblement node app.js ça marche pas comme ça
+  //faut surement modifier le project config, je google it
+  //Trop swagg ce tchat improvisé ahah
   if (cursors.left.isDown){
       //  Move to the left
-
-    console.log(map.getTileWorldXY(player.position.x, player.position.y, 25, 25, layer));
-    console.log(player.position.x);
-    console.log(player.position.y);
-      /*while (leftTile.index != 2) {
-
-      }*/
       player.body.velocity.x = -150;
       player.body.velocity.y = 0;
       player.animations.play('left');
@@ -97,3 +83,21 @@ function update() {
   }
 
 }
+
+monster = function(game,x,y){
+  Phaser.Sprite.call(this,game,x,y,'star');
+}
+
+monster.prototype = Object.create(Phaser.Sprite.prototype);
+monster.prototype.constructor = monster;
+
+monster.prototype.create = function(){
+  game.physics.enable(this);
+  game.physics.arcade.collide(this, layer);
+}
+
+monster.prototype.update = function(){
+  //console.log("hello");
+}
+
+//bat les couilles wallah déconne pas

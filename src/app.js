@@ -1,7 +1,7 @@
 var express = require('express');
+var app = express();
 var server = require('http').createServer(app);
 var ejs = require('ejs');
-var app = express();
 var path = require ('path');
 
 /*
