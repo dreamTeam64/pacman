@@ -59,7 +59,7 @@ function update() {
   if (cursors.left.isDown){
       //  Move to the left
       isWall = (leftTile == 2);
-      if (is wall) {
+      if (iswall) {
         console.log("it s a wall");
       }
       if (!isWall){
