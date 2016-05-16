@@ -33,7 +33,7 @@ function create() {
 
     game.physics.enable(player);
 
-    player.body.collideWorldBounds = true;
+    //player.body.collideWorldBounds = true;
     //player.body.setSize(23, 23, 0, 0);
     player.animations.add('left', [6, 5, 4], 10, true);
     player.animations.add('right', [9, 8, 7], 10, true);
@@ -41,8 +41,14 @@ function create() {
     player.animations.add('up', [12, 11, 10], 10, true);
 
     var m_un = new monster(game,200,300);
-    game.add.existing(m_un);
 
+    game.add.existing(m_un);
+    var pac = new pacman(game,layer,200,200);
+    game.add.existing(pac);
+
+    game.physics.arcade.collide(pac, layer);
+
+    game.physics.enable(pac);
     cursors = game.input.keyboard.createCursorKeys();
 }
 
@@ -121,21 +127,52 @@ function update() {
 
 }
 
-pacman = function(game,x,y){
-    pacman.direction;
+pacman = function(game,layer,x,y){
+  Phaser.Sprite.call(this,game,x,y,'pacman');
+  this.speed = 150;
+  this.x = x;
+  this.y = y;
+  this.layer = layer;
+  this.game = game;
+
+  console.log(this.game);
 }
 pacman.prototype = Object.create(Phaser.Sprite.prototype);
 pacman.prototype.constructor = pacman;
 
+pacman.prototype.create = function(){
+  //game.physics.enable(this);
+  //game.physics.arcade.collide(this, layer);
+  this.animations.add('left', [6, 5, 4], 10, true);
+  this.animations.add('right', [9, 8, 7], 10, true);
+  this.animations.add('down', [3, 2, 1], 10, true);
+  this.animations.add('up', [12, 11, 10], 10, true);
+}
+
+pacman.prototype.canGo = function(direction,player, layer, map){
+  if (direction == 'down') {
+      return((map.getTileWorldXY(player.position.x + 24, player.position.y + 25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136)); //down
+  }
+  if (direction == 'up') {
+      return((map.getTileWorldXY(player.position.x + 24, player.position.y - 1, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y - 1, 25, 25, layer).index == 136)); //up
+  }
+  if (direction == 'right'){
+      return((map.getTileWorldXY(player.position.x + 25, player.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x + 25, player.position.y, 25, 25, layer).index == 136)); //right
+  }
+  if (direction == 'left') {
+      return((map.getTileWorldXY(player.position.x - 1, player.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x - 1, player.position.y, 25, 25, layer).index == 136)); //left
+  }
+}
+
+pacman.prototype.update = function(){
+    this.body.velocity.x = this.speed;
+}
+
+
+
 monster = function(game,x,y){
   Phaser.Sprite.call(this,game,x,y,'star');
 }
-
-pacman.prototype.create = function(){
-  game.physics.enable(this);
-  game.physics.arcade.collide(this, layer);
-}
-
 //monster herite des methodes et prop de Phaser.Sprite
 monster.prototype = Object.create(Phaser.Sprite.prototype);
 //monster et le constructeur de la classe monster
