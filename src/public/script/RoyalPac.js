@@ -47,21 +47,23 @@ function create() {
 }
 
 function canGo(direction ,player, layer, map){
+  var test;
   if (direction == "down"){
-      return((map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
+      test =((map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
       //La prochaine fois essaye d'expliquer quel est le raisonnement ^^ là j'en chie ahah
   }
   if(direction == "up"){
-      return((map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
+      test =((map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
   }
     
   if (direction == "right"){
-      return((map.getTileWorldXY(player.position.x + 25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));    
+      test =((map.getTileWorldXY(player.position.x + 25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));    
   }
     
   if (direction == "left"){
-      return((map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));    
+      test =((map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));    
   }
+  return test;
 }
 
 function update() {
