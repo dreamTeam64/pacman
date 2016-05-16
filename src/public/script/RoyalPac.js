@@ -46,17 +46,17 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 
-function canGoDown(direction, player, layer, map){ // le + 24 c'est pour quoi ? j'ai pas pu test puisque le app.js s'est vidé pour des raisons inconnues
-  if(direction == "down"){
+function canGo(direction, player, layer, map){ // le + 24 c'est pour quoi ?
+  if(direction == 'down'){
     return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
   }
-  if(direction == "up"){
+  if(direction == 'up'){
     return((map.getTileWorldXY(player.position.x + (24), player.position.y -25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
   }
-  if (direction == "right"){
+  if (direction == 'right'){
     return((map.getTileWorldXY(player.position.x + (25), player.position.y +(24), 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));
   }
-  if (direction == "left"){
+  if (direction == 'left'){
     return((map.getTileWorldXY(player.position.x - (25), player.position.y +(24), 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));
   }
 }
@@ -82,7 +82,7 @@ function update() {
   var downTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var isWall;
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
-  if (canGoDown("down",player,layer,map)) {
+  if (canGo('down',player,layer,map)) {
     console.log("il y a un passage en dessous")
   }
   if (cursors.left.isDown){
