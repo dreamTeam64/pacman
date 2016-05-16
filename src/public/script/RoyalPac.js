@@ -51,15 +51,15 @@ function canGoDown(player, layer, map){ // le + 24 c'est pour quoi ?
 }
 
 function canGoUp(player, layer, map){
-    return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
+//     return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
 }
 
 function canGoRight(player, layer, map){
-    return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));
+//     return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));
 }
 
 function canGoLeft(player, layer, map){
-    return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));
+//     return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));
 }
 
 function update() {
@@ -71,10 +71,12 @@ function update() {
   var upTile = map.getTileWorldXY(player.position.x, player.position.y -1, 25, 25, layer).index;
   var downTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var isWall;
-  //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
+  
   if (canGoDown(player,layer,map)) {
-    console.log("il y a un passage en dessous")
+    console.log("il y a un passage en dessous");
   }
+  
+  //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
       //  Move to the left
       isWall = (leftTile == 2);
