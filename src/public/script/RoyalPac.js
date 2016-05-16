@@ -46,31 +46,21 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 
-function canGo(direction, player, layer, map){ // le + 24 c'est pour quoi ?
-  if(direction == 'down'){
+function canGoDown(player, layer, map){ // le + 24 c'est pour quoi ?
     return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
-  }
-  if(direction == 'up'){
-    return((map.getTileWorldXY(player.position.x + (24), player.position.y -25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
-  }
-  if (direction == 'right'){
-    return((map.getTileWorldXY(player.position.x + (25), player.position.y +(24), 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));
-  }
-  if (direction == 'left'){
-    return((map.getTileWorldXY(player.position.x - (25), player.position.y +(24), 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));
-  }
 }
-/*function canGoUp(player, layer, map){
-  //TODO: adapter le premier exemple
+
+function canGoUp(player, layer, map){
+    return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
 }
 
 function canGoRight(player, layer, map){
-  //TODO: adapter le premier exemple
+    return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));
 }
 
 function canGoLeft(player, layer, map){
-  //TODO: adapter le premier exemple
-}*/
+    return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));
+}
 
 function update() {
   game.physics.arcade.collide(player, layer);
@@ -82,7 +72,7 @@ function update() {
   var downTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var isWall;
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
-  if (canGo('down',player,layer,map)) {
+  if (canGoDown(player,layer,map)) {
     console.log("il y a un passage en dessous")
   }
   if (cursors.left.isDown){
