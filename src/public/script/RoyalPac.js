@@ -47,23 +47,25 @@ function create() {
 }
 
 function canGo(direction ,player, layer, map){
-  var test;
-  if (direction == "down"){
-      test =((map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
-      //La prochaine fois essaye d'expliquer quel est le raisonnement ^^ là j'en chie ahah
+  if (direction == "down"){ //                 (+24)
+      console.log("il y a un passage en dessous");
+      return((map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
+      //La prochaine fois essaye d'expliquer quel est le raisonnement ^^ là j'en chie ahah - Francois
   }
   if(direction == "up"){
-      test =((map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
+      console.log("il y a un passage au-dessus");
+      return((map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
   }
     
   if (direction == "right"){
-      test =((map.getTileWorldXY(player.position.x + 25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));    
+      console.log("il y a un passage à droite");
+      return((map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));    
   }
     
   if (direction == "left"){
-      test =((map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));    
+      console.log("il y a un passage à gauche");
+      return((map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));    
   }
-  return test;
 }
 
 function update() {
@@ -75,20 +77,13 @@ function update() {
   var upTile = map.getTileWorldXY(player.position.x, player.position.y -1, 25, 25, layer).index;
   var downTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var isWall;
-  //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
-  if(canGo("down",player,layer,map)){
-    console.log("il y a un passage en dessous");
-  }
-  if(canGo("up",player,layer,map)){
-    console.log("il y a un passage au-dessus");
-  }
-  if(canGo("right",player,layer,map)){
-    console.log("il y a un passage à droite");
-  }
-  if(canGo("left",player,layer,map)){
-    console.log("il y a un passage à gauche");
-  }
+  
+  canGo("down",player,layer,map);
+  canGo("up",player,layer,map);
+  canGo("right",player,layer,map);
+  canGo("left",player,layer,map);
     
+  //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   
   if (cursors.left.isDown){
       //  Move to the left
