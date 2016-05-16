@@ -46,20 +46,22 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 
-function canGoDown(player, layer, map){
-  return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
-}
-
-function canGoUp(player, layer, map){
-  //TODO: adapter le premier exemple
-}
-
-function canGoRight(player, layer, map){
-  //TODO: adapter le premier exemple
-}
-
-function canGoLeft(player, layer, map){
-  //TODO: adapter le premier exemple
+function canGo(direction ,player, layer, map){
+  if (direction == "down"){
+      return((map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
+      //La prochaine fois essaye d'expliquer quel est le raisonnement ^^ là j'en chie ahah
+  }
+  if(direction == "up"){
+      return((map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
+  }
+    
+  if (direction == "right"){
+      return((map.getTileWorldXY(player.position.x + 25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));    
+  }
+    
+  if (direction == "left"){
+      return((map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));    
+  }
 }
 
 function update() {
@@ -72,9 +74,20 @@ function update() {
   var downTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var isWall;
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
-  if (canGoDown(player,layer,map)) {
-    console.log("il y a un passage en dessous")
+  if(canGo("down",player,layer,map)){
+    console.log("il y a un passage en dessous");
   }
+  if(canGo("up",player,layer,map)){
+    console.log("il y a un passage au-dessus");
+  }
+  if(canGo("right",player,layer,map)){
+    console.log("il y a un passage à droite");
+  }
+  if(canGo("left",player,layer,map)){
+    console.log("il y a un passage à gauche");
+  }
+    
+  
   if (cursors.left.isDown){
       //  Move to the left
       isWall = (leftTile == 2);
@@ -118,18 +131,15 @@ function update() {
         console.log("it s a wall");
       }
       if (!isWall){
-        setTimeout(function(){
-          player.body.velocity.y = 50;
-          player.body.velocity.x = 0;
-          player.animations.play('down');
-        },500);
+        player.body.velocity.y = 50;
+        player.body.velocity.x = 0;
+        player.animations.play('down');
       }
   }
 
 }
-/* DEFINITION DES DIFFERENTS ELEMENTS DU JEU */
 
-var monster = function(game,x,y){
+monster = function(game,x,y){
   Phaser.Sprite.call(this,game,x,y,'star');
 }
 
