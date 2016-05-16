@@ -46,7 +46,7 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 
-function canGoDown(direction ,player, layer, map){
+function canGoDown(player, layer, map){
   return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
 }
 
