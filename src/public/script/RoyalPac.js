@@ -118,9 +118,11 @@ function update() {
         console.log("it s a wall");
       }
       if (!isWall){
-        player.body.velocity.y = 50;
-        player.body.velocity.x = 0;
-        player.animations.play('down');
+        setTimeout(function(){
+          player.body.velocity.y = 50;
+          player.body.velocity.x = 0;
+          player.animations.play('down');
+        },500);
       }
   }
 
