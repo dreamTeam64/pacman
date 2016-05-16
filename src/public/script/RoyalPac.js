@@ -46,26 +46,20 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 
-function canGoDown(player, layer, map){
- 
-      console.log("il y a un passage en dessous");
-      return((map.getTileWorldXY(player.position.x (+24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
-      //La prochaine fois essaye d'expliquer quel est le raisonnement ^^ là j'en chie ahah - Francois
- 
-  /*if(direction == "up"){
-      console.log("il y a un passage au-dessus");
-      return((map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
-  }
-    
-  if (direction == "right"){
-      console.log("il y a un passage à droite");
-      return((map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));    
-  }
-    
-  if (direction == "left"){
-      console.log("il y a un passage à gauche");
-      return((map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));    
-  }*/
+function canGoDown(direction ,player, layer, map){
+  return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
+}
+
+function canGoUp(player, layer, map){
+  //TODO: adapter le premier exemple
+}
+
+function canGoRight(player, layer, map){
+  //TODO: adapter le premier exemple
+}
+
+function canGoLeft(player, layer, map){
+  //TODO: adapter le premier exemple
 }
 
 function update() {
@@ -77,14 +71,10 @@ function update() {
   var upTile = map.getTileWorldXY(player.position.x, player.position.y -1, 25, 25, layer).index;
   var downTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var isWall;
-  
-  canGoDown(player,layer,map);
-//   canGo("up",player,layer,map);
-//   canGo("right",player,layer,map);
-//   canGo("left",player,layer,map);
-    
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
-  
+  if (canGoDown(player,layer,map)) {
+    console.log("il y a un passage en dessous")
+  }
   if (cursors.left.isDown){
       //  Move to the left
       isWall = (leftTile == 2);
