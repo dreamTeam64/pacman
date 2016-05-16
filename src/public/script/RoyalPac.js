@@ -64,18 +64,18 @@ function canGoLeft(player, layer, map){
 
 function update() {
   game.physics.arcade.collide(player, layer);
-  
-  //Get Tiles around player 
+
+  //Get Tiles around player
   var leftTile = map.getTileWorldXY(player.position.x -1, player.position.y, 25, 25, layer).index;
   var rightTile = map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index;
   var upTile = map.getTileWorldXY(player.position.x, player.position.y -1, 25, 25, layer).index;
   var downTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
   var isWall;
-  
+
   if (canGoDown(player,layer,map)) {
     console.log("il y a un passage en dessous");
   }
-  
+
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
       //  Move to the left
@@ -87,7 +87,7 @@ function update() {
         player.body.velocity.x = -50;
         player.body.velocity.y = 0;
         player.animations.play('left');
-      }  
+      }
   }
   if (cursors.right.isDown){
       //  Move to the right
@@ -132,7 +132,10 @@ monster = function(game,x,y){
   Phaser.Sprite.call(this,game,x,y,'star');
 }
 
+//monster herite des methodes et prop de Phaser.Sprite
 monster.prototype = Object.create(Phaser.Sprite.prototype);
+//monster et le constructeur de la classe monster
+//monster est une classe fille de Phaser.Sprite
 monster.prototype.constructor = monster;
 
 monster.prototype.create = function(){
