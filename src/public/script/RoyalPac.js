@@ -46,83 +46,80 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 }
 
-function canGoDown(player, layer, map){ // le + 24 c'est pour quoi ?
-    return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136));
+function canGo(direction, player, layer, map){ // le + 24 c'est pour quoi ?
+    if (direction == 'down') {
+        return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136)); //down
+    }
+    if (direction == 'up') {
+        return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136)); //up
+    }
+    if (direction == 'right'){
+        return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136)); //right
+    }
+    if (direction == 'left') {
+        return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136)); //left
+    }
 }
 
-function canGoUp(player, layer, map){
-//     return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index == 136));
+pacman = function(){
+    pacman.direction;
 }
-
-function canGoRight(player, layer, map){
-//     return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index == 136));
-}
-
-function canGoLeft(player, layer, map){
-//     return((map.getTileWorldXY(player.position.x + (24), player.position.y +25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index == 136));
-}
+pacman.prototype.constructor = pacman;
 
 function update() {
   game.physics.arcade.collide(player, layer);
-  
-  //Get Tiles around player 
-  var leftTile = map.getTileWorldXY(player.position.x -1, player.position.y, 25, 25, layer).index;
-  var rightTile = map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index;
-  var upTile = map.getTileWorldXY(player.position.x, player.position.y -1, 25, 25, layer).index;
-  var downTile = map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index;
-  var isWall;
-  
-  if (canGoDown(player,layer,map)) {
-    console.log("il y a un passage en dessous");
-  }
-  
+
+
+  if (canGo('left',player,layer,map) || canGo('right',player,layer,map) || canGo('up',player,layer,map) || canGo('down',player,layer,map)) {
+    console.log("ça paaaasse !");
+    console.log("LeftTile = " + map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index);
+    console.log("RightTile = " + map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index);
+    console.log("UpTile = " + map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index);
+    console.log("DownTile = " + map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index);
+}
+    var caPasse = canGo('left',player,layer,map) + canGo('right',player,layer,map) + canGo('up',player,layer,map) + canGo('down',player,layer,map);
+    if (caPasse) {
+        console.log("caPasse = true");
+    }
+    else {
+        console.log("caPasse = false");
+    }
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
       //  Move to the left
-      isWall = (leftTile == 2);
-      if (isWall) {
-        console.log("it s a wall");
-      }
-      if (!isWall){
+
+      if (caPasse){
         player.body.velocity.x = -50;
         player.body.velocity.y = 0;
         player.animations.play('left');
-      }  
+        pacman.direction = 'left';
+      }
   }
   if (cursors.right.isDown){
       //  Move to the right
-      isWall = (rightTile == 2);
-      if (isWall) {
-        console.log("it s a wall");
-      }
-      if (!isWall){
+      if (caPasse){
         player.body.velocity.x = 50;
         player.body.velocity.y = 0;
         player.animations.play('right');
+        pacman.direction = 'right';
       }
   }
   if (cursors.up.isDown){
       //  Move up
-      isWall = (upTile == 2);
-      if (isWall) {
-        console.log("it s a wall");
-      }
-      if (!isWall){
+      if (caPasse){
         player.body.velocity.y = -50;
         player.body.velocity.x = 0;
         player.animations.play('up');
+        pacman.direction = 'up';
       }
   }
   if (cursors.down.isDown){
       //  Move down
-      isWall = (downTile == 2);
-      if (isWall) {
-        console.log("it s a wall");
-      }
-      if (!isWall){
+      if (caPasse){
         player.body.velocity.y = 50;
         player.body.velocity.x = 0;
         player.animations.play('down');
+        pacman.direction = 'down';
       }
   }
 
