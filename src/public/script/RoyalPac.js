@@ -12,6 +12,7 @@ function preload() {
 var map;
 var layer;
 var player;
+var pac;
 var tiles;
 var tileset;
 var cursors;
@@ -43,7 +44,7 @@ function create() {
     var m_un = new monster(game,200,300);
 
     game.add.existing(m_un);
-    var pac = new pacman(game,layer,200,200);
+    pac = new pacman(game,layer,200,200);
     game.add.existing(pac);
 
     game.physics.arcade.collide(pac, layer);
@@ -71,7 +72,7 @@ function canGo(direction, player, layer, map){
 
 function update() {
   game.physics.arcade.collide(player, layer);
-
+  game.physics.arcade.collide(pac, layer);
 
   if (canGo('left',player,layer,map) || canGo('right',player,layer,map) || canGo('up',player,layer,map) || canGo('down',player,layer,map)) {
     console.log("ça paaaasse !");
@@ -129,7 +130,7 @@ function update() {
 
 pacman = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'pacman');
-  this.speed = 150;
+  this.speed = 10;
   this.x = x;
   this.y = y;
   this.layer = layer;
@@ -149,26 +150,31 @@ pacman.prototype.create = function(){
   this.animations.add('up', [12, 11, 10], 10, true);
 }
 
-pacman.prototype.canGo = function(direction,player, layer, map){
+pacman.prototype.canGo = function(direction, layer, map){
   if (direction == 'down') {
-      return((map.getTileWorldXY(player.position.x + 24, player.position.y + 25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136)); //down
+      return((map.getTileWorldXY(this.position.x + 24, this.position.y + 25, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x, this.position.y +25, 25, 25, layer).index == 136)); //down
   }
   if (direction == 'up') {
-      return((map.getTileWorldXY(player.position.x + 24, player.position.y - 1, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y - 1, 25, 25, layer).index == 136)); //up
+      return((map.getTileWorldXY(this.position.x + 24, this.position.y - 1, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x, this.position.y - 1, 25, 25, layer).index == 136)); //up
   }
   if (direction == 'right'){
-      return((map.getTileWorldXY(player.position.x + 25, player.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x + 25, player.position.y, 25, 25, layer).index == 136)); //right
+      return((map.getTileWorldXY(this.position.x + 25, this.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x + 25, this.position.y, 25, 25, layer).index == 136)); //right
   }
   if (direction == 'left') {
-      return((map.getTileWorldXY(player.position.x - 1, player.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x - 1, player.position.y, 25, 25, layer).index == 136)); //left
+      return((map.getTileWorldXY(this.position.x - 1, this.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x - 1, this.position.y, 25, 25, layer).index == 136)); //left
   }
 }
 
 pacman.prototype.update = function(){
     this.body.velocity.x = this.speed;
+    console.log(Math.abs(this.body.x - this.x));
+
+    this.x = this.body.x;
+    if (this.canGo("up",layer,map)) {
+      this.body.velocity.x = 0;
+      this.body.velocity.y = -150;
+    }
 }
-
-
 
 monster = function(game,x,y){
   Phaser.Sprite.call(this,game,x,y,'star');
