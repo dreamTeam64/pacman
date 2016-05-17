@@ -141,7 +141,7 @@ pacman = function(game,layer,x,y){
   this.y = y;
 
   //calcul de la vitesse relative selon les axes X et Y
-  this.relativeSpeed = NULL;
+  this.relativeSpeed = 0;
 
   //les objets nécessaire
   this.layer = layer;
