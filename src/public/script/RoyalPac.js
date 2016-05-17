@@ -12,6 +12,7 @@ function preload() {
 var map;
 var layer;
 var player;
+var pac;
 var tiles;
 var tileset;
 var cursors;
@@ -32,9 +33,10 @@ function create() {
     player = game.add.sprite(375,375,'pacman');
 
     game.physics.enable(player);
-
+    // echo("je veux merge");
     player.body.collideWorldBounds = true;
     // player.scale.setTo(0.95,0.95);
+    //player.body.collideWorldBounds = true;
     //player.body.setSize(23, 23, 0, 0);
     player.animations.add('left', [6, 5, 4], 10, true);
     player.animations.add('right', [9, 8, 7], 10, true);
@@ -42,8 +44,14 @@ function create() {
     player.animations.add('up', [12, 11, 10], 10, true);
 
     var m_un = new monster(game,200,300);
-    game.add.existing(m_un);
 
+    game.add.existing(m_un);
+    pac = new pacman(game,layer,200,200);
+    game.add.existing(pac);
+
+    game.physics.arcade.collide(pac, layer);
+
+    game.physics.enable(pac);
     cursors = game.input.keyboard.createCursorKeys();
 }
 
@@ -66,7 +74,7 @@ function canGo(direction, player, layer, map){
 
 function update() {
   game.physics.arcade.collide(player, layer);
-
+  game.physics.arcade.collide(pac, layer);
 
   if (canGo('left',player,layer,map) || canGo('right',player,layer,map) || canGo('up',player,layer,map) || canGo('down',player,layer,map)) {
     console.log("ça paaaasse !");
@@ -74,7 +82,7 @@ function update() {
     console.log("RightTile = " + map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index);
     console.log("UpTile = " + map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index);
     console.log("DownTile = " + map.getTileWorldXY(player.position.x +24, player.position.y +25, 25, 25, layer).index);
-}
+  }
     var caPasse = canGo('left',player,layer,map) + canGo('right',player,layer,map) + canGo('up',player,layer,map) + canGo('down',player,layer,map);
     if (caPasse) {
         console.log("caPasse = true");
@@ -122,21 +130,85 @@ function update() {
 
 }
 
-pacman = function(game,x,y){
-    pacman.direction;
+pacman = function(game,layer,x,y){
+  Phaser.Sprite.call(this,game,x,y,'pacman');
+  this.speed_x = 30;
+  this.speed_y = 0;
+  this.x = x;
+  this.y = y;
+  this.relativeSpeed = 0;
+  this.layer = layer;
+  this.game = game;
+  this.waitingVerticalMovement = true;
+  this.waitingHorizontalMovement = false;
+
+  console.log(this.game);
 }
 pacman.prototype = Object.create(Phaser.Sprite.prototype);
 pacman.prototype.constructor = pacman;
 
+pacman.prototype.create = function(){
+  this.animations.add('left', [6, 5, 4], 10, true);
+  this.animations.add('right', [9, 8, 7], 10, true);
+  this.animations.add('down', [3, 2, 1], 10, true);
+  this.animations.add('up', [12, 11, 10], 10, true);
+}
+
+pacman.prototype.canGo = function(direction, layer, map){
+  if (direction == 'down') {
+      return((map.getTileWorldXY(this.position.x + 24, this.position.y + 25, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x, this.position.y +25, 25, 25, layer).index == 136)); //down
+  }
+  if (direction == 'up') {
+      return((map.getTileWorldXY(this.position.x + 24, this.position.y - 1, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x, this.position.y - 1, 25, 25, layer).index == 136)); //up
+  }
+  if (direction == 'right'){
+      return((map.getTileWorldXY(this.position.x + 25, this.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x + 25, this.position.y, 25, 25, layer).index == 136)); //right
+  }
+  if (direction == 'left') {
+      return((map.getTileWorldXY(this.position.x - 1, this.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x - 1, this.position.y, 25, 25, layer).index == 136)); //left
+  }
+}
+
+pacman.prototype.update = function(){
+    this.body.velocity.x = this.speed_x;
+    this.body.velocity.y = this.speed_y;
+    console.log(this.body.x);
+    console.log(this.body.y);
+    this.relativeSpeed = Math.abs(this.body.x - this.x);
+
+    if (this.canGo("up",layer,map) && this.waitingVerticalMovement) {
+      this.speed_x = 0;
+
+      console.log(Math.floor(this.body.x));
+      this.body.x = Math.floor(this.body.x);
+      this.body.y = Math.floor(this.body.y);
+      this.speed_y = -30;
+
+      this.waitingVerticalMovement = false;
+      this.waitingHorizontalMovement = true;
+
+    }
+    if (this.canGo("left",layer,map) && this.waitingHorizontalMovement) {
+      this.speed_y = 0;
+
+      console.log(Math.floor(this.body.x));
+      this.body.x = Math.floor(this.body.x);
+      this.body.y = Math.floor(this.body.y);
+      this.speed_x = -30;
+
+      this.waitingVerticalMovement = true;
+      this.waitingHorizontalMovement = false;
+
+    }
+
+    //mise à jour des coordonnées de l'objet
+    this.y = this.body.y;
+    this.x = this.body.x;
+}
+
 monster = function(game,x,y){
   Phaser.Sprite.call(this,game,x,y,'star');
 }
-
-pacman.prototype.create = function(){
-  game.physics.enable(this);
-  game.physics.arcade.collide(this, layer);
-}
-
 //monster herite des methodes et prop de Phaser.Sprite
 monster.prototype = Object.create(Phaser.Sprite.prototype);
 //monster et le constructeur de la classe monster
