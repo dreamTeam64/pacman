@@ -33,7 +33,6 @@ function create() {
     player = game.add.sprite(375,375,'pacman');
 
     game.physics.enable(player);
-    // echo("je veux merge");
     player.body.collideWorldBounds = true;
     // player.scale.setTo(0.95,0.95);
     //player.body.collideWorldBounds = true;
