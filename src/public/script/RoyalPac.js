@@ -33,7 +33,8 @@ function create() {
     player = game.add.sprite(375,375,'pacman');
 
     game.physics.enable(player);
-
+    player.body.collideWorldBounds = true;
+    // player.scale.setTo(0.95,0.95);
     //player.body.collideWorldBounds = true;
     //player.body.setSize(23, 23, 0, 0);
     player.animations.add('left', [6, 5, 4], 10, true);
@@ -92,7 +93,7 @@ function update() {
   if (cursors.left.isDown){
       //  Move to the left
       if (canGo('left',player,layer,map)){
-        player.body.velocity.x = -300;
+        player.body.velocity.x = -25;
         player.body.velocity.y = 0;
         player.animations.play('left');
         pacman.direction = 'left';
@@ -101,7 +102,7 @@ function update() {
   if (cursors.right.isDown){
       //  Move to the right
       if (canGo('right',player,layer,map)){
-        player.body.velocity.x = 300;
+        player.body.velocity.x = 25;
         player.body.velocity.y = 0;
         player.animations.play('right');
         pacman.direction = 'right';
@@ -110,7 +111,7 @@ function update() {
   if (cursors.up.isDown){
       //  Move up
       if (canGo('up',player,layer,map)){
-        player.body.velocity.y = -300;
+        player.body.velocity.y = -25;
         player.body.velocity.x = 0;
         player.animations.play('up');
         pacman.direction = 'up';
@@ -119,7 +120,7 @@ function update() {
   if (cursors.down.isDown){
       //  Move down
       if (canGo('down',player,layer,map)){
-        player.body.velocity.y = 300;
+        player.body.velocity.y = 25;
         player.body.velocity.x = 0;
         player.animations.play('down');
         pacman.direction = 'down';
