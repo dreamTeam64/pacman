@@ -17,7 +17,7 @@ var tiles;
 var tileset;
 var cursors;
 var Point;
-
+var scoreText;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -43,6 +43,7 @@ function create() {
     player.animations.add('down', [3, 2, 1], 10, true);
     player.animations.add('up', [12, 11, 10], 10, true);
 
+
     var m_un = new monster(game,200,300);
 
     game.add.existing(m_un);
@@ -54,9 +55,13 @@ function create() {
     game.physics.enable(pac);
 
     Point = new point (game,layer,'Simple',1);
+    //Point=game.add.group();
     game.physics.enable(Point);
     Point.create(game,layer,map);
+    Point.enableBody = true;
     cursors = game.input.keyboard.createCursorKeys();
+
+    scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
 }
 
 function canGo(direction, player, layer, map){
@@ -90,9 +95,9 @@ function isStick(player,layer,map){
 function update() {
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(pac, layer);
-  game.physics.arcade.collide(point, pac);
+  collision = game.physics.arcade.collide(point, pac);
   isStick(player,layer,map);
-
+  Point.update(game,layer,map);
 
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
@@ -151,14 +156,25 @@ point.prototype.create = function (game,layer,map) {
     var j=0;
     for (i = 0; i < 31; i++) {
         for (j = 0; j < 24; j++) {
-            console.log("coucou; i= "+i+" j= " + j); //Wtf pourquoi le j s'incrémente pas !!! (ノ °益°)ノ ︵ (\﻿ .o.)\
             if (map.getTile(i,j,layer,true).index == 136) {
-                console.log("i: "+i+"; j: "+j+"; spawnable !");
                 game.add.sprite(i*25,j*25,'star');
             }
         }
     }
 };
+
+function Scoring(pacman, Point) {
+    console.log("Kill");
+    Point.kill(); //Enlever l'étoile
+    score += Point.value;
+    scoreText.text = 'score: '+ score;
+}
+
+point.prototype.update = function(game,layer,map){
+    game.physics.arcade.overlap(pacman,Point,Scoring,null,this);
+}
+
+
 /* LE LABO, PACMANS ET MONSTRES EN PRODUCTION ... ET MEME DES ARBRES ! */
 
 var noeud = {
