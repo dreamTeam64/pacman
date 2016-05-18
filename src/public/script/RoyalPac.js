@@ -150,8 +150,8 @@ point.prototype.create = function (game,layer,map) {
     var i=0;
     var j=0;
     for (i = 0; i < 25; i++) {
-        for (j = 0; i < 25; i++) {
-            console.log("coucou; i= "+i+" j= " + j); //Wtf pourquoi le j s'incrémente pas !!! (ノ °益°)ノ ︵ (\﻿ .o.)\ 
+        for (j = 0; j < 25; j++) {
+            console.log("coucou; i= "+i+" j= " + j); //Wtf pourquoi le j s'incrémente pas !!! (ノ °益°)ノ ︵ (\﻿ .o.)\
             if (map.getTile(i,j,layer).index == 136) {
                 console.log("i: "+i+"; j: "+j+"; spawnable !");
                 //Phaser.Sprite.call(this,game,i,j,'star');
