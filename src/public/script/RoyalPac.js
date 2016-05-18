@@ -71,10 +71,7 @@ function canGo(direction, player, layer, map){
     }
 }
 
-function update() {
-  game.physics.arcade.collide(player, layer);
-  game.physics.arcade.collide(pac, layer);
-
+function isStick(player,layer,map){
   if (canGo('left',player,layer,map) || canGo('right',player,layer,map) || canGo('up',player,layer,map) || canGo('down',player,layer,map)) {
     console.log("ça paaaasse !");
     console.log("LeftTile = " + map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index);
@@ -85,10 +82,19 @@ function update() {
     var caPasse = canGo('left',player,layer,map) + canGo('right',player,layer,map) + canGo('up',player,layer,map) + canGo('down',player,layer,map);
     if (caPasse) {
         console.log("caPasse = true");
+        return true;
     }
     else {
         console.log("caPasse = false");
+        return false;
     }
+}
+
+function update() {
+  game.physics.arcade.collide(player, layer);
+  game.physics.arcade.collide(pac, layer);
+
+
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
       //  Move to the left
@@ -129,6 +135,20 @@ function update() {
 
 }
 
+var noeud = {
+  donnée: 0,
+  droit: null,
+  gauche: null,
+  pere: null,
+}
+
+var arbre = {
+  nom: "abre de décision",
+  racine: Object.create(noeud),
+  getNom: function(){
+    console.log(this.nom);
+  }
+}
 
 //constructeur de l'objet Pacman
 pacman = function(game,layer,x,y){
