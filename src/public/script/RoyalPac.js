@@ -82,58 +82,63 @@ function isStick(player,layer,map){
     var caPasse = canGo('left',player,layer,map) + canGo('right',player,layer,map) + canGo('up',player,layer,map) + canGo('down',player,layer,map);
     if (caPasse) {
         console.log("caPasse = true");
-        return true;
+        return false;
     }
     else {
         console.log("caPasse = false");
-        return false;
+        return true;
     }
 }
 
 function update() {
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(pac, layer);
-
+  isStick(player,layer,map);
 
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
+      player.body.velocity.x = -30;
       //  Move to the left
       if (canGo('left',player,layer,map)){
-        player.body.velocity.x = -25;
+        player.body.velocity.x = -30;
         player.body.velocity.y = 0;
         player.animations.play('left');
         pacman.direction = 'left';
       }
   }
   if (cursors.right.isDown){
+      player.body.velocity.x = 30;
       //  Move to the right
       if (canGo('right',player,layer,map)){
-        player.body.velocity.x = 25;
+        player.body.velocity.x = 30;
         player.body.velocity.y = 0;
         player.animations.play('right');
         pacman.direction = 'right';
       }
   }
   if (cursors.up.isDown){
+      player.body.velocity.y = -30;
       //  Move up
       if (canGo('up',player,layer,map)){
-        player.body.velocity.y = -25;
+        player.body.velocity.y = -30;
         player.body.velocity.x = 0;
         player.animations.play('up');
         pacman.direction = 'up';
       }
   }
   if (cursors.down.isDown){
+      player.body.velocity.y = 30;
       //  Move down
       if (canGo('down',player,layer,map)){
-        player.body.velocity.y = 25;
+        player.body.velocity.y = 30;
         player.body.velocity.x = 0;
         player.animations.play('down');
         pacman.direction = 'down';
       }
   }
-
 }
+
+/* LE LABO, PACMANS ET MONSTRES EN PRODUCTION ... ET MEME DES ARBRES ! */
 
 var noeud = {
   donnée: 0,
