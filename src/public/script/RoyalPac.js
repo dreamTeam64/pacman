@@ -16,6 +16,7 @@ var pac;
 var tiles;
 var tileset;
 var cursors;
+var Point;
 
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -51,6 +52,10 @@ function create() {
     game.physics.arcade.collide(pac, layer);
 
     game.physics.enable(pac);
+
+    Point = new point (game,layer,'Simple',1);
+    game.physics.enable(Point);
+    Point.create(game,layer,map);
     cursors = game.input.keyboard.createCursorKeys();
 }
 
@@ -72,20 +77,12 @@ function canGo(direction, player, layer, map){
 }
 
 function isStick(player,layer,map){
-  if (canGo('left',player,layer,map) || canGo('right',player,layer,map) || canGo('up',player,layer,map) || canGo('down',player,layer,map)) {
-    console.log("ça paaaasse !");
-    console.log("LeftTile = " + map.getTileWorldXY(player.position.x -25, player.position.y, 25, 25, layer).index);
-    console.log("RightTile = " + map.getTileWorldXY(player.position.x +25, player.position.y, 25, 25, layer).index);
-    console.log("UpTile = " + map.getTileWorldXY(player.position.x, player.position.y -25, 25, 25, layer).index);
-    console.log("DownTile = " + map.getTileWorldXY(player.position.x +24, player.position.y +25, 25, 25, layer).index);
-  }
+
     var caPasse = canGo('left',player,layer,map) + canGo('right',player,layer,map) + canGo('up',player,layer,map) + canGo('down',player,layer,map);
     if (caPasse) {
-        console.log("caPasse = true");
         return false;
     }
     else {
-        console.log("caPasse = false");
         return true;
     }
 }
@@ -93,7 +90,9 @@ function isStick(player,layer,map){
 function update() {
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(pac, layer);
+  game.physics.arcade.collide(point, pac);
   isStick(player,layer,map);
+
 
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
@@ -137,7 +136,29 @@ function update() {
       }
   }
 }
+/* Le systèmes de points*/
 
+point = function(game,layer,type,value){
+    this.hit = false;
+    this.type = type; // Simple ou Fruit
+    this.value = value; // 1, ou 50 pour le fruit
+}
+point.prototype = Object.create(Phaser.Sprite.prototype);
+point.prototype.constructor = point;
+
+point.prototype.create = function (game,layer,map) {
+    var i=0;
+    var j=0;
+    for (i = 0; i < 25; i++) {
+        for (j = 0; i < 25; i++) {
+            console.log("coucou; i= "+i+" j= " + j); //Wtf pourquoi le j s'incrémente pas !!! (ノ °益°)ノ ︵ (\﻿ .o.)\ 
+            if (map.getTile(i,j,layer).index == 136) {
+                console.log("i: "+i+"; j: "+j+"; spawnable !");
+                //Phaser.Sprite.call(this,game,i,j,'star');
+            }
+        }
+    }
+};
 /* LE LABO, PACMANS ET MONSTRES EN PRODUCTION ... ET MEME DES ARBRES ! */
 
 var noeud = {
@@ -211,19 +232,19 @@ pacman.prototype.update = function(){
     this.body.velocity.y = this.speed_y;
 
     //débug des position au temps t
-    console.log(this.body.x);
-    console.log(this.body.y);
+    // console.log(this.body.x);
+    // console.log(this.body.y);
 
     //formule de notre ami Pyhthagore, pour une fois que tu sert à quelque chose !
     this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
-    console.log("vitesse relative : "+this.relativeSpeed);
+    // console.log("vitesse relative : "+this.relativeSpeed);
 
     //petit test de décision
     if (this.canGo("up",layer,map) && this.waitingVerticalMovement) {
       this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontal
 
       //bidouillage, si x = 125.00001234 alors ca ne passe pas, donc on lui FLOOR ca mère comme ca x = 125 et bim !
-      console.log(Math.floor(this.body.x));
+    //   console.log(Math.floor(this.body.x));
       this.body.x = Math.floor(this.body.x);
       this.body.y = Math.floor(this.body.y);
       this.speed_y = -30;
@@ -235,7 +256,7 @@ pacman.prototype.update = function(){
     if (this.canGo("left",layer,map) && this.waitingHorizontalMovement) {
       this.speed_y = 0;
 
-      console.log(Math.floor(this.body.x));
+    //   console.log(Math.floor(this.body.x));
       this.body.x = Math.floor(this.body.x);
       this.body.y = Math.floor(this.body.y);
       this.speed_x = -30;
