@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 var ejs = require('ejs');
 var path = require ('path');
 
@@ -25,4 +26,12 @@ app.use(function(req, res, next){
   res.render('error.ejs');
 });
 
-app.listen(8080);
+var io = require('socket.io').listen(server);
+
+
+io.sockets.on('connection', function (socket) {
+    console.log('Un client est connecté !');
+    socket.emit('message', 'Vous êtes bien connecté !');
+});
+
+server.listen(8080);
