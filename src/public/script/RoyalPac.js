@@ -163,7 +163,7 @@ point.prototype.create = function (game,layer,map) {
 
 var noeud = {
   donnée: 0,
-  droit: null,
+  droite: null,
   gauche: null,
   pere: null,
 }
@@ -171,6 +171,9 @@ var noeud = {
 var arbre = {
   nom: "abre de décision",
   racine: Object.create(noeud),
+  actuel: null,
+  compteur:0,
+  hauteur:0,
   getNom: function(){
     console.log(this.nom);
   }
