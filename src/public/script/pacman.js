@@ -1,6 +1,6 @@
 //constructeur de l'objet Pacman
 pacman = function(game,layer,x,y){
-  Phaser.Sprite.call(this,game,x,y,'pacman');
+  Phaser.Sprite.call(this,game,x,y,'greendy');
   this.speed_x = 30; //vitesse horizontal
   this.speed_y = 0; //vitesse vertical
 
@@ -11,6 +11,8 @@ pacman = function(game,layer,x,y){
   //calcul de la vitesse relative selon les axes X et Y
   this.relativeSpeed = 0;
 
+  this.actualMovement = null;
+
   //les objets nécessaire
   this.layer = layer;
   this.game = game;
@@ -18,6 +20,9 @@ pacman = function(game,layer,x,y){
   //Permet d'éviter les conflits dans les décisions
   this.waitingVerticalMovement = true;
   this.waitingHorizontalMovement = false;
+
+  //         UP    DOWN  RIGHT LEFT
+  this.dir = [false,false,false,false];
 }
 
 //pacman hérite de l'objet Phaser.Sprite
@@ -48,7 +53,70 @@ pacman.prototype.canGo = function(direction, layer, map){
   }
 }
 
+pacman.prototype.chooseWay = function(layer,map){
+  this.canGo('up',layer,map) ? this.dir[0] = true : this.dir[0] = false;
+  this.canGo('down',layer,map) ? this.dir[1] = true : this.dir[1] = false;
+  this.canGo('right',layer,map) ? this.dir[2] = true : this.dir[2] = false;
+  this.canGo('left',layer,map) ? this.dir[3] = true : this.dir[3] = false;
+  console.log(this.dir);
+}
+
+pacman.prototype.moveUp = function(){
+  this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontal
+
+  //bidouillage, si x = 125.00001234 alors ca ne passe pas, donc on lui FLOOR ca mère comme ca x = 125 et bim !
+  //console.log(Math.floor(this.body.x));
+  this.body.x = Math.floor(this.body.x);
+  this.body.y = Math.floor(this.body.y);
+  this.speed_y = -30;
+  this.animations.play('up');
+
+  this.waitingVerticalMovement = false;
+  this.waitingHorizontalMovement = true;
+}
+
+pacman.prototype.moveDown = function(){
+  this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontal
+
+  //bidouillage, si x = 125.00001234 alors ca ne passe pas, donc on lui FLOOR ca mère comme ca x = 125 et bim !
+  //console.log(Math.floor(this.body.x));
+  this.body.x = Math.floor(this.body.x);
+  this.body.y = Math.floor(this.body.y);
+  this.speed_y = 30;
+  this.animations.play('Down');
+
+  this.waitingVerticalMovement = false;
+  this.waitingHorizontalMovement = true;
+}
+
+pacman.prototype.moveRight = function(){
+  this.speed_y = 0;
+
+  //   console.log(Math.floor(this.body.x));
+  this.body.x = Math.floor(this.body.x);
+  this.body.y = Math.floor(this.body.y);
+  this.speed_x = 30;
+  this.animations.play('right');
+
+  this.waitingVerticalMovement = true;
+  this.waitingHorizontalMovement = false;
+}
+
+pacman.prototype.moveLeft = function(){
+  this.speed_y = 0;
+
+  //   console.log(Math.floor(this.body.x));
+  this.body.x = Math.floor(this.body.x);
+  this.body.y = Math.floor(this.body.y);
+  this.speed_x = -30;
+  this.animations.play('left');
+
+  this.waitingVerticalMovement = true;
+  this.waitingHorizontalMovement = false;
+}
+
 pacman.prototype.update = function(){
+    this.chooseWay(layer,map);
     //Mouvement du pacman en x et y
     this.body.velocity.x = this.speed_x;
     this.body.velocity.y = this.speed_y;
@@ -63,29 +131,11 @@ pacman.prototype.update = function(){
 
     //petit test de décision
     if (this.canGo("up",layer,map) && this.waitingVerticalMovement) {
-      this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontal
-
-      //bidouillage, si x = 125.00001234 alors ca ne passe pas, donc on lui FLOOR ca mère comme ca x = 125 et bim !
-      //console.log(Math.floor(this.body.x));
-      this.body.x = Math.floor(this.body.x);
-      this.body.y = Math.floor(this.body.y);
-      this.speed_y = -30;
-
-      this.waitingVerticalMovement = false;
-      this.waitingHorizontalMovement = true;
+      this.moveUp();
 
     }
     if (this.canGo("left",layer,map) && this.waitingHorizontalMovement) {
-      this.speed_y = 0;
-
-    //   console.log(Math.floor(this.body.x));
-      this.body.x = Math.floor(this.body.x);
-      this.body.y = Math.floor(this.body.y);
-      this.speed_x = -30;
-
-      this.waitingVerticalMovement = true;
-      this.waitingHorizontalMovement = false;
-
+      this.moveLeft();
     }
 
     //mise à jour des coordonnées de l'objet

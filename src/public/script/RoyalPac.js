@@ -7,6 +7,9 @@ function preload() {
     game.load.image('tiles', '../assets/TileSet.png');
     game.load.image('star', '../assets/star.png');
     game.load.spritesheet('pacman','../assets/pacman_test.png',25,25,13);
+    game.load.spritesheet('greendy','../assets/greendy.png',25,25,4);
+    game.load.spritesheet('reddit','../assets/reddit.png',25,25,4);
+    game.load.spritesheet('yellowStone','../assets/yellowStone.png',25,25,4);
 }
 
 var map;
