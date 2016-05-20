@@ -16,7 +16,7 @@ var pac;
 var tiles;
 var tileset;
 var cursors;
-var Point;
+var points;
 var scoreText;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -43,18 +43,26 @@ function create() {
     player.animations.add('down', [3, 2, 1], 10, true);
     player.animations.add('up', [12, 11, 10], 10, true);
 
+    //INSTANCE DU PACMAN
     pac = new pacman(game,layer,200,200);
     game.add.existing(pac);
-
     game.physics.arcade.collide(pac, layer);
-
     game.physics.enable(pac);
 
-    Point = new point (game,layer,'Simple',1);
-    //Point=game.add.group();
-    game.physics.enable(Point);
-    Point.create(game,layer,map);
-    Point.enableBody = true;
+    //INSTANCE DES POINTS
+    points = game.add.group();
+    points.enableBody = true;
+    var i=0;
+    var j=0;
+    for (i = 0; i < 31; i++) {
+        for (j = 0; j < 24; j++) {
+            if (map.getTile(i,j,layer,true).index == 136) {
+                var point = points.create(i*25,j*25,'star');
+            }
+        }
+    }
+
+
     cursors = game.input.keyboard.createCursorKeys();
 
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
@@ -91,9 +99,12 @@ function isStick(player,layer,map){
 function update() {
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(pac, layer);
-  collision = game.physics.arcade.collide(point, pac);
+  game.physics.arcade.overlap(player, points, function(player,point){
+    point.kill();
+    console.log("HELLO WORLD");
+  }, null, this);
+
   isStick(player,layer,map);
-  Point.update(game,layer,map);
 
   //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
   if (cursors.left.isDown){
