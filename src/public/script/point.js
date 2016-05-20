@@ -1,4 +1,4 @@
-point = function(game,layer,type,value,player,points){
+point = function(game,layer,type,value,player,points,score){
     //this.hit = false;
     var type = type; // Simple ou Fruit
     var value = value; // 1, ou 50 pour le fruit
@@ -9,7 +9,7 @@ point = function(game,layer,type,value,player,points){
     var value = value;
     var player = player;
 
-    this.score = 0;
+    this.score = score;
 
     points.game.add.group();
 }
@@ -33,12 +33,4 @@ point.prototype.create = function () {
 */
 point.prototype.update = function(){
     this.game.physics.arcade.overlap(this.player,this.points,Scoring,null,this);
-}
-
-function Scoring(pacman,Point) {
-    console.log("Kill");
-    Point.kill(); //Enlever l'étoile
-    score += 10;
-    console.log(this.score);
-    scoreText.text = 'score: '+ this.score;
 }

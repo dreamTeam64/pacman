@@ -17,6 +17,7 @@ var tiles;
 var tileset;
 var cursors;
 var points;
+var score = 0;
 var scoreText;
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -96,12 +97,17 @@ function isStick(player,layer,map){
     }
 }
 
+function Scoring(pacman,Point) {
+    Point.kill(); //Enlever l'étoile
+    score += 10;
+    scoreText.text = 'score: '+ score;
+}
+
 function update() {
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(pac, layer);
   game.physics.arcade.overlap(player, points, function(player,point){
-    point.kill();
-    console.log("HELLO WORLD");
+    Scoring(pacman,point);
   }, null, this);
 
   isStick(player,layer,map);
