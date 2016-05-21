@@ -25,19 +25,23 @@ pacman = function(game,layer,x,y){
   this.dir =[
   {
     possible:false,
-    eval:0
+    eval:0,
+    movement: "up"
   },
   {
     possible:false,
-    eval:0
+    eval:0,
+    movement: "down"
   },
   {
     possible:false,
-    eval:0
+    eval:0,
+    movement: "right"
   },
   {
     possible:false,
-    eval:0
+    eval:0,
+    movement: "left"
   }];
 }
 
@@ -84,6 +88,51 @@ pacman.prototype.chooseWay = function(layer,map){
   ((this.body.x - player.body.x) > 0) ? this.dir[0].eval = 1 : this.dir[1].eval = 1;
   ((this.body.y - player.body.y) > 0) ? this.dir[2].eval = 1 : this.dir[3].eval = 1;
   console.log(this.dir);
+
+  //return final choice
+  var indice;
+  var res;
+
+  indice = 0;
+
+  for (var i = 0; i < this.dir.length; i++) {
+    if ((this.dir[i].possible == true) && (this.actualMovement != this.dir[i].movement)) {
+      indice = i;
+      if (this.dir[i].eval == 1) {
+        res = i;
+        break;
+      }
+    }
+  }
+
+  res = indice;
+  console.log(res);
+  switch (res) {
+    case 1:
+      this.moveUp();
+      this.actualMovement = "up";
+      break;
+
+    case 2:
+      this.moveDown();
+      this.actualMovement = "down";
+      break;
+
+    case 3:
+      this.moveRight();
+      this.actualMovement = "right";
+      break;
+
+    case 4:
+      this.moveLeft();
+      this.actualMovement = "left";
+      break;
+
+    default:
+      this.moveUp();
+      this.actualMovement = "up";
+    }
+
 }
 
 pacman.prototype.moveUp = function(){
@@ -91,9 +140,9 @@ pacman.prototype.moveUp = function(){
 
   //bidouillage, si x = 125.00001234 alors ca ne passe pas, donc on lui FLOOR ca mère comme ca x = 125 et bim !
   //console.log(Math.floor(this.body.x));
-  this.body.x = Math.floor(this.body.x);
-  this.body.y = Math.floor(this.body.y);
-  this.speed_y = -30;
+  //this.body.x = Math.floor(this.body.x);
+  //this.body.y = Math.floor(this.body.y);
+  this.speed_y = -50;
   this.animations.play('up');
 
   this.waitingVerticalMovement = false;
@@ -105,9 +154,9 @@ pacman.prototype.moveDown = function(){
 
   //bidouillage, si x = 125.00001234 alors ca ne passe pas, donc on lui FLOOR ca mère comme ca x = 125 et bim !
   //console.log(Math.floor(this.body.x));
-  this.body.x = Math.floor(this.body.x);
-  this.body.y = Math.floor(this.body.y);
-  this.speed_y = 30;
+  //this.body.x = Math.floor(this.body.x);
+  //this.body.y = Math.floor(this.body.y);
+  this.speed_y = 50;
   this.animations.play('Down');
 
   this.waitingVerticalMovement = false;
@@ -118,9 +167,9 @@ pacman.prototype.moveRight = function(){
   this.speed_y = 0;
 
   //   console.log(Math.floor(this.body.x));
-  this.body.x = Math.floor(this.body.x);
-  this.body.y = Math.floor(this.body.y);
-  this.speed_x = 30;
+  //this.body.x = Math.floor(this.body.x);
+  //this.body.y = Math.floor(this.body.y);
+  this.speed_x = 50;
   this.animations.play('right');
 
   this.waitingVerticalMovement = true;
@@ -131,9 +180,9 @@ pacman.prototype.moveLeft = function(){
   this.speed_y = 0;
 
   //   console.log(Math.floor(this.body.x));
-  this.body.x = Math.floor(this.body.x);
-  this.body.y = Math.floor(this.body.y);
-  this.speed_x = -30;
+  //this.body.x = Math.floor(this.body.x);
+  //this.body.y = Math.floor(this.body.y);
+  this.speed_x = -50;
   this.animations.play('left');
 
   this.waitingVerticalMovement = true;
@@ -146,27 +195,15 @@ pacman.prototype.update = function(){
     console.log(player.body.y);
 
 
-    this.chooseWay(layer,map);
+    //this.chooseWay(layer,map);
     //Mouvement du pacman en x et y
     this.body.velocity.x = this.speed_x;
     this.body.velocity.y = this.speed_y;
 
-    //débug des position au temps t
-    // console.log(this.body.x);
-    // console.log(this.body.y);
-
     //formule de notre ami Pyhthagore, pour une fois que tu sert à quelque chose !
     this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
-    // console.log("vitesse relative : "+this.relativeSpeed);
 
-    //petit test de décision
-    if (this.canGo("up",layer,map) && this.waitingVerticalMovement) {
-      this.moveUp();
-
-    }
-    if (this.canGo("left",layer,map) && this.waitingHorizontalMovement) {
-      this.moveLeft();
-    }
+    this.chooseWay(layer,map);
 
     //mise à jour des coordonnées de l'objet
     this.y = this.body.y;
