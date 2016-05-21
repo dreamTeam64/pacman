@@ -22,7 +22,23 @@ pacman = function(game,layer,x,y){
   this.waitingHorizontalMovement = false;
 
   //         UP    DOWN  RIGHT LEFT
-  this.dir = [false,false,false,false];
+  this.dir =[
+  {
+    possible:false,
+    eval:0
+  },
+  {
+    possible:false,
+    eval:0
+  },
+  {
+    possible:false,
+    eval:0
+  },
+  {
+    possible:false,
+    eval:0
+  }];
 }
 
 //pacman hérite de l'objet Phaser.Sprite
@@ -54,10 +70,19 @@ pacman.prototype.canGo = function(direction, layer, map){
 }
 
 pacman.prototype.chooseWay = function(layer,map){
-  this.canGo('up',layer,map) ? this.dir[0] = true : this.dir[0] = false;
-  this.canGo('down',layer,map) ? this.dir[1] = true : this.dir[1] = false;
-  this.canGo('right',layer,map) ? this.dir[2] = true : this.dir[2] = false;
-  this.canGo('left',layer,map) ? this.dir[3] = true : this.dir[3] = false;
+  this.canGo('up',layer,map) ? this.dir[0].possible = true : this.dir[0].possible = false;
+  this.canGo('down',layer,map) ? this.dir[1].possible = true : this.dir[1].possible = false;
+  this.canGo('right',layer,map) ? this.dir[2].possible = true : this.dir[2].possible = false;
+  this.canGo('left',layer,map) ? this.dir[3].possible = true : this.dir[3].possible = false;
+
+  //reset des valeurs
+  for (var i = 0; i < this.dir.length; i++) {
+    this.dir[i].eval = 0;
+  }
+
+  //definition des priorités
+  ((this.body.x - player.body.x) > 0) ? this.dir[0].eval = 1 : this.dir[1].eval = 1;
+  ((this.body.y - player.body.y) > 0) ? this.dir[2].eval = 1 : this.dir[3].eval = 1;
   console.log(this.dir);
 }
 
@@ -116,6 +141,11 @@ pacman.prototype.moveLeft = function(){
 }
 
 pacman.prototype.update = function(){
+    //player est une variable global, on peut donc y acceder sans passage par paramètre
+    console.log(player.body.x);
+    console.log(player.body.y);
+
+
     this.chooseWay(layer,map);
     //Mouvement du pacman en x et y
     this.body.velocity.x = this.speed_x;

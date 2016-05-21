@@ -15,3 +15,5 @@ var arbre = {
     console.log(this.nom);
   }
 }
+
+console.log("salut");
