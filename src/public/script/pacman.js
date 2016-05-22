@@ -1,6 +1,7 @@
 //constructeur de l'objet Pacman
 pacman = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
+
   this.speed_x = 0; //vitesse horizontal
   this.speed_y = 0; //vitesse vertical
 
@@ -21,7 +22,6 @@ pacman = function(game,layer,x,y){
   this.waitingVerticalMovement = true;
   this.waitingHorizontalMovement = false;
 
-  //         UP    DOWN  RIGHT LEFT
   this.dir =[
   {
     possible:false,
@@ -96,17 +96,20 @@ pacman.prototype.chooseWay = function(layer,map){
   indice = 0;
 
   for (var i = 0; i < this.dir.length; i++) {
-    if ((this.dir[i].possible == true) && (this.actualMovement != this.dir[i].movement)) {
+    if (this.dir[i].possible == true ) {
       indice = i;
-      if (this.dir[i].eval == 1) {
+      if ((this.dir[i].eval == 1) && (this.actualMovement == this.dir[i].movement)) {
         res = i;
         break;
       }
     }
   }
 
-  res = indice;
+  res > indice ? res = res : res = indice;
   console.log(res);
+
+  console.log(this.actualMovement);
+
   switch (res) {
     case 0:
       this.moveUp();

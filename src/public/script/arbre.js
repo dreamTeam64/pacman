@@ -1,7 +1,14 @@
+/*
+Creation d'un arbre d'hauteur 6.
+Chaque noeud correspond à un test et débouche sur un autre test.
+Chaque feuille représente une valeur à retourner.
+
+*/
+
 var noeud = {
   donnée: 0,
-  droite: null,
-  gauche: null,
+  nbFils:0,
+  fils:[];
   pere: null,
 }
 
