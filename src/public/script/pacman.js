@@ -1,7 +1,7 @@
 //constructeur de l'objet Pacman
 pacman = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
-  this.speed_x = 30; //vitesse horizontal
+  this.speed_x = 0; //vitesse horizontal
   this.speed_y = 0; //vitesse vertical
 
   //position du pacman
@@ -11,7 +11,7 @@ pacman = function(game,layer,x,y){
   //calcul de la vitesse relative selon les axes X et Y
   this.relativeSpeed = 0;
 
-  this.actualMovement = null;
+  this.actualMovement = 'right';
 
   //les objets nécessaire
   this.layer = layer;
@@ -108,22 +108,22 @@ pacman.prototype.chooseWay = function(layer,map){
   res = indice;
   console.log(res);
   switch (res) {
-    case 1:
+    case 0:
       this.moveUp();
       this.actualMovement = "up";
       break;
 
-    case 2:
+    case 1:
       this.moveDown();
       this.actualMovement = "down";
       break;
 
-    case 3:
+    case 2:
       this.moveRight();
       this.actualMovement = "right";
       break;
 
-    case 4:
+    case 3:
       this.moveLeft();
       this.actualMovement = "left";
       break;
@@ -137,11 +137,6 @@ pacman.prototype.chooseWay = function(layer,map){
 
 pacman.prototype.moveUp = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontal
-
-  //bidouillage, si x = 125.00001234 alors ca ne passe pas, donc on lui FLOOR ca mère comme ca x = 125 et bim !
-  //console.log(Math.floor(this.body.x));
-  //this.body.x = Math.floor(this.body.x);
-  //this.body.y = Math.floor(this.body.y);
   this.speed_y = -50;
   this.animations.play('up');
 
@@ -151,11 +146,6 @@ pacman.prototype.moveUp = function(){
 
 pacman.prototype.moveDown = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontal
-
-  //bidouillage, si x = 125.00001234 alors ca ne passe pas, donc on lui FLOOR ca mère comme ca x = 125 et bim !
-  //console.log(Math.floor(this.body.x));
-  //this.body.x = Math.floor(this.body.x);
-  //this.body.y = Math.floor(this.body.y);
   this.speed_y = 50;
   this.animations.play('Down');
 
@@ -165,10 +155,6 @@ pacman.prototype.moveDown = function(){
 
 pacman.prototype.moveRight = function(){
   this.speed_y = 0;
-
-  //   console.log(Math.floor(this.body.x));
-  //this.body.x = Math.floor(this.body.x);
-  //this.body.y = Math.floor(this.body.y);
   this.speed_x = 50;
   this.animations.play('right');
 
@@ -178,10 +164,6 @@ pacman.prototype.moveRight = function(){
 
 pacman.prototype.moveLeft = function(){
   this.speed_y = 0;
-
-  //   console.log(Math.floor(this.body.x));
-  //this.body.x = Math.floor(this.body.x);
-  //this.body.y = Math.floor(this.body.y);
   this.speed_x = -50;
   this.animations.play('left');
 
