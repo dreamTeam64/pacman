@@ -73,68 +73,63 @@ pacman.prototype.canGo = function(direction, layer, map){
   }
 }
 
+pacman.prototype.playerIsAbove = function(){
+  return (this.body.y < player.body.y);
+}
+
+pacman.prototype.isPlayerOnRight = function(){
+  return (this.body.x < player.body.x);
+}
+
 pacman.prototype.chooseWay = function(layer,map){
-  this.canGo('up',layer,map) ? this.dir[0].possible = true : this.dir[0].possible = false;
-  this.canGo('down',layer,map) ? this.dir[1].possible = true : this.dir[1].possible = false;
-  this.canGo('right',layer,map) ? this.dir[2].possible = true : this.dir[2].possible = false;
-  this.canGo('left',layer,map) ? this.dir[3].possible = true : this.dir[3].possible = false;
-
-  //reset des valeurs
-  for (var i = 0; i < this.dir.length; i++) {
-    this.dir[i].eval = 0;
-  }
-
-  //definition des priorités
-  ((this.body.x - player.body.x) > 0) ? this.dir[0].eval = 1 : this.dir[1].eval = 1;
-  ((this.body.y - player.body.y) > 0) ? this.dir[2].eval = 1 : this.dir[3].eval = 1;
-  console.log(this.dir);
-
-  //return final choice
-  var indice;
   var res;
 
-  indice = 0;
-
-  for (var i = 0; i < this.dir.length; i++) {
-    if (this.dir[i].possible == true ) {
-      indice = i;
-      if ((this.dir[i].eval == 1) && (this.actualMovement == this.dir[i].movement)) {
-        res = i;
-        break;
+  if (this.playerIsAbove()) {
+    if (this.isPlayerOnRight()) {
+      if (this.canGo("up",layer,map)) {
+        this.moveUp();
+      } else if (this.canGo("right",layer,map)) {
+        this.moveRight();
+      } else if (this.canGo("left",layer,map)) {
+        this.moveLeft();
+      } else {
+        this.moveDown();
+      }
+    } else {
+      if (this.canGo("up",layer,map)) {
+        this.moveUp();
+      } else if (this.canGo("left",layer,map)) {
+        this.moveLeft();
+      } else if (this.canGo("right",layer,map)) {
+        this.moveRight();
+      } else {
+        this.moveDown();
+      }
+    }
+  } else { //cas de !PlayerIsAbove()
+    if (this.isPlayerOnRight()) {
+      if (this.canGo("down",layer,map)) {
+        this.moveDown();
+      } else if (this.canGo("right",layer,map)) {
+        this.moveRight();
+      } else if (this.canGo("left",layer,map)) {
+        this.moveLeft();
+      } else {
+        this.moveUp();
+      }
+    } else { //cas de !isPlayerOnRight()
+      if (this.canGo("down",layer,map)) {
+        this.moveDown();
+      } else if (this.canGo("left",layer,map)) {
+        this.moveLeft();
+      } else if (this.canGo("right",layer,map)) {
+        this.moveRight();
+      } else {
+        this.moveUp();
       }
     }
   }
 
-  res > indice ? res = res : res = indice;
-  console.log(res);
-
-  console.log(this.actualMovement);
-
-  switch (res) {
-    case 0:
-      this.moveUp();
-      this.actualMovement = "up";
-      break;
-
-    case 1:
-      this.moveDown();
-      this.actualMovement = "down";
-      break;
-
-    case 2:
-      this.moveRight();
-      this.actualMovement = "right";
-      break;
-
-    case 3:
-      this.moveLeft();
-      this.actualMovement = "left";
-      break;
-
-    default:
-      this.moveUp();
-      this.actualMovement = "up";
-    }
 
 }
 
@@ -187,6 +182,9 @@ pacman.prototype.update = function(){
 
     //formule de notre ami Pyhthagore, pour une fois que tu sert à quelque chose !
     this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
+
+    console.log(this.playerIsAbove());
+    console.log(this.isPlayerOnRight);
 
     this.chooseWay(layer,map);
 
