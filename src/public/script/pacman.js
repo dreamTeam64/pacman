@@ -21,28 +21,6 @@ pacman = function(game,layer,x,y){
   //Permet d'éviter les conflits dans les décisions
   this.waitingVerticalMovement = true;
   this.waitingHorizontalMovement = false;
-
-  this.dir =[
-  {
-    possible:false,
-    eval:0,
-    movement: "up"
-  },
-  {
-    possible:false,
-    eval:0,
-    movement: "down"
-  },
-  {
-    possible:false,
-    eval:0,
-    movement: "right"
-  },
-  {
-    possible:false,
-    eval:0,
-    movement: "left"
-  }];
 }
 
 //pacman hérite de l'objet Phaser.Sprite
