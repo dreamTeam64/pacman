@@ -60,69 +60,67 @@ pacman.prototype.isPlayerOnRight = function(){
 }
 
 pacman.prototype.chooseWay = function(layer,map){
-  var res;
-
-  if (this.playerIsAbove()) {
-    if (this.isPlayerOnRight()) {
-      if (this.canGo("up",layer,map)) {
+    var res;
+    console.log(this.canGo("up",layer,map));
+    //console.log(this.canGo("down",layer,map));
+    if (this.canGo("up",layer,map)) {
         this.moveUp();
-      } else if (this.canGo("right",layer,map)) {
-        this.moveRight();
-      } else if (this.canGo("left",layer,map)) {
-        this.moveLeft();
-      } else {
-        this.moveDown();
-      }
-    } else {
-      if (this.canGo("up",layer,map)) {
-        this.moveUp();
-      } else if (this.canGo("left",layer,map)) {
-        this.moveLeft();
-      } else if (this.canGo("right",layer,map)) {
-        this.moveRight();
-      } else {
-        this.moveDown();
-      }
     }
-  } else { //cas de !PlayerIsAbove()
-    if (this.isPlayerOnRight()) {
-      if (this.canGo("down",layer,map)) {
-        this.moveDown();
-      } else if (this.canGo("right",layer,map)) {
-        this.moveRight();
-      } else if (this.canGo("left",layer,map)) {
-        this.moveLeft();
-      } else {
-        this.moveUp();
-      }
-    } else { //cas de !isPlayerOnRight()
-      if (this.canGo("down",layer,map)) {
-        this.moveDown();
-      } else if (this.canGo("left",layer,map)) {
-        this.moveLeft();
-      } else if (this.canGo("right",layer,map)) {
-        this.moveRight();
-      } else {
-        this.moveUp();
-      }
-    }
-  }
+    // if (this.canGo("down",layer,map)) {
+    //     this.moveDown();
+    // }
+    if (this.playerIsAbove()) {
+        if (this.isPlayerOnRight()) {
+            //A droite
+            if (this.canGo("up",layer,map)) {
+                this.moveUp();
+            }
+            if (this.canGo("right",layer,map)) {
+                this.moveRight();
+            }
+        } else {
+            //A gauche
+                if (this.canGo("up",layer,map)) {
+                    this.moveUp();
+                }
+                if (this.canGo("left",layer,map)) {
+                    this.moveLeft();
+                }
+            }
+    } else
+    { //cas de !PlayerIsAbove()
+        if (this.isPlayerOnRight()) {
+            if (this.canGo("down",layer,map)) {
+                this.moveDown();
+            }
+            if (this.canGo("right",layer,map)) {
+                this.moveRight();
+            }
+            } else { //cas de !isPlayerOnRight()
+                if (this.canGo("down",layer,map)) {
+                    this.moveDown();
+                }
+                if (this.canGo("left",layer,map)) {
+                    this.moveLeft();
+                }
+            }
+        }
 
 
 }
 
 pacman.prototype.moveUp = function(){
-  this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontal
-  this.speed_y = -50;
+  this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
+  this.speed_y = -0; //-50
   this.animations.play('up');
 
-  this.waitingVerticalMovement = false;
-  this.waitingHorizontalMovement = true;
+  this.waitingVerticalMovement = true;
+  this.waitingHorizontalMovement = false;
 }
 
 pacman.prototype.moveDown = function(){
-  this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontal
-  this.speed_y = 50;
+  this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
+  this.speed_y = 0; // 50
   this.animations.play('Down');
 
   this.waitingVerticalMovement = false;
@@ -136,6 +134,7 @@ pacman.prototype.moveRight = function(){
 
   this.waitingVerticalMovement = true;
   this.waitingHorizontalMovement = false;
+
 }
 
 pacman.prototype.moveLeft = function(){
@@ -148,9 +147,10 @@ pacman.prototype.moveLeft = function(){
 }
 
 pacman.prototype.update = function(){
-    //player est une variable global, on peut donc y acceder sans passage par paramètre
-    console.log(player.body.x);
-    console.log(player.body.y);
+    //player est une variable globale, on peut donc y acceder sans passage par paramètre
+
+    // console.log(player.body.x);
+    // console.log(player.body.y);
 
 
     //this.chooseWay(layer,map);
@@ -161,8 +161,8 @@ pacman.prototype.update = function(){
     //formule de notre ami Pyhthagore, pour une fois que tu sert à quelque chose !
     this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
 
-    console.log(this.playerIsAbove());
-    console.log(this.isPlayerOnRight);
+    // console.log(this.playerIsAbove());
+    // console.log(this.isPlayerOnRight);
 
     this.chooseWay(layer,map);
 
