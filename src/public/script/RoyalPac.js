@@ -14,16 +14,36 @@ function preload() {
     game.load.spritesheet('yellowStone','../assets/yellowStone.png',25,25,4);
 }
 
+/* Déclaration des variables globales au jeu */
 var map;
 var layer;
 var player;
-var pac;
+var fantome;
 var tiles;
 var tileset;
 var cursors;
 var points;
 var score = 0;
 var scoreText;
+
+var blocked = false;
+var pathfinder;
+var walkables;
+
+function findPathTo(tilex, tiley) {
+
+    pathfinder.setCallbackFunction(function(path) {
+        path = path || [];
+        for(var i = 0, ilen = path.length; i < ilen; i++) {
+            map.putTile(46, path[i].x, path[i].y);
+        }
+        blocked = false;
+    });
+
+    pathfinder.preparePathCalculation([0,0], [tilex,tiley]);
+    pathfinder.calculatePath();
+}
+
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -51,11 +71,26 @@ function create() {
     player.animations.add('down', [3, 2, 1], 10, true);
     player.animations.add('up', [12, 11, 10], 10, true);
 
+<<<<<<< HEAD
     //INSTANCE DU PACMAN /// FANTOME DU COUP ????? /// AH BAH NON TAIN LA LOGIQUE DU TYPE
     pac = new pacman(game,layer,200,200);
     game.add.existing(pac);
     game.physics.arcade.collide(pac, layer);
     game.physics.enable(pac);
+=======
+    //gestion du pathfinder
+    walkables = [136];
+
+    pathfinder = game.plugins.add(Phaser.Plugin.PathFinderPlugin);
+    pathfinder.setGrid(map.layers[0].data, walkables);
+
+
+    //INSTANCE DU Fantome
+    fantome = new pacman(game,layer,200,200);
+    game.add.existing(fantome);
+    game.physics.arcade.collide(fantome, layer);
+    game.physics.enable(fantome);
+>>>>>>> 581245a6333c0b13c4060373ab516ca7330d1757
 
 
 
@@ -166,8 +201,9 @@ function MovementHandler(){
 }
 
 function update() {
+  console.log(pathfinder);
   game.physics.arcade.collide(player, layer);
-  game.physics.arcade.collide(pac, layer);
+  game.physics.arcade.collide(fantome, layer);
   game.physics.arcade.overlap(player, points, function(player,point){
     Scoring(pacman,point);
   }, null, this);

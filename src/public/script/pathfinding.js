@@ -1,3 +1,9 @@
+/*
+  See https://github.com/appsbu-de/phaser_plugin_pathfinding/blob/master/bin/phaser_pathfinding-0.2.0.js
+
+
+*/
+
 //For require.js
 if (typeof define === "function" && define.amd) {
 	define("easystar", [], function() {
