@@ -36,6 +36,19 @@ function create() {
     map.setCollision(2);
     map.setCollision(1);
 
+
+    //INSTANCE DES POINTS
+    points = game.add.group();
+    points.enableBody = true;
+    var i=0;
+    var j=0;
+    for (i = 0; i < 31; i++) {
+        for (j = 0; j < 24; j++) {
+            if (map.getTile(i,j,layer,true).index == 136) {
+                var point = points.create(i*25,j*25,'star');
+            }
+        }
+    }
     game.physics.arcade.collide(player, layer);
     player = game.add.sprite(375,375,'pacman');
 
@@ -55,18 +68,6 @@ function create() {
     game.physics.arcade.collide(pac, layer);
     game.physics.enable(pac);
 
-    //INSTANCE DES POINTS
-    points = game.add.group();
-    points.enableBody = true;
-    var i=0;
-    var j=0;
-    for (i = 0; i < 31; i++) {
-        for (j = 0; j < 24; j++) {
-            if (map.getTile(i,j,layer,true).index == 136) {
-                var point = points.create(i*25,j*25,'star');
-            }
-        }
-    }
 
 
     cursors = game.input.keyboard.createCursorKeys();
