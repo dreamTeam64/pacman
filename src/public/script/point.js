@@ -5,9 +5,8 @@ point = function(game,layer,type,value,player,points,score){
 
     var game = game;
     var layer = layer;
-    var type = type;
-    var value = value;
     var player = player;
+    var howLeft = howLeft
 
     this.score = score;
 

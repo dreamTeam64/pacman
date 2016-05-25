@@ -1,6 +1,7 @@
 //constructeur de l'objet Pacman
 pacman = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
+  this.velocityPlayer = 50; //Definit la vitesse du joueur
 
   this.speed_x = 0; //vitesse horizontal
   this.speed_y = 0; //vitesse vertical

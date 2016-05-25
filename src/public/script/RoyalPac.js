@@ -36,19 +36,8 @@ function create() {
     map.setCollision(2);
     map.setCollision(1);
 
+    PlacePoint();
 
-    //INSTANCE DES POINTS
-    points = game.add.group();
-    points.enableBody = true;
-    var i=0;
-    var j=0;
-    for (i = 0; i < 31; i++) {
-        for (j = 0; j < 24; j++) {
-            if (map.getTile(i,j,layer,true).index == 136) {
-                var point = points.create(i*25,j*25,'star');
-            }
-        }
-    }
     game.physics.arcade.collide(player, layer);
     player = game.add.sprite(375,375,'pacman');
 
@@ -62,7 +51,7 @@ function create() {
     player.animations.add('down', [3, 2, 1], 10, true);
     player.animations.add('up', [12, 11, 10], 10, true);
 
-    //INSTANCE DU PACMAN
+    //INSTANCE DU PACMAN /// FANTOME DU COUP ????? /// AH BAH NON TAIN LA LOGIQUE DU TYPE
     pac = new pacman(game,layer,200,200);
     game.add.existing(pac);
     game.physics.arcade.collide(pac, layer);
@@ -103,10 +92,77 @@ function isStick(player,layer,map){
     }
 }
 
+function PlacePoint(){
+    //INSTANCE DES POINTS
+    points = game.add.group();
+    points.enableBody = true;
+    var i=0;
+    var j=0;
+    for (i = 0; i < 31; i++) {
+        for (j = 0; j < 24; j++) {
+            if (map.getTile(i,j,layer,true).index == 136) {
+                var point = points.create(i*25,j*25,'star');
+                points.howLeft++;
+            }
+        }
+    }
+}
+
+function Reset(Point)
+{
+    if (Point.howLeft == 0) {
+        PlacePoint();
+    }
+}
+
 function Scoring(pacman,Point) {
     Point.kill(); //Enlever l'étoile
     score += 10;
     scoreText.text = 'score: '+ score;
+    Point.howLeft--;
+}
+
+function MovementHandler(){
+    if (cursors.left.isDown){
+        player.body.velocity.x = -pacman.velocityPlayer;
+        //  Move to the left
+        if (canGo('left',player,layer,map)){
+          player.body.velocity.x = -pacman.velocityPlayer;
+          player.body.velocity.y = 0;
+          player.animations.play('left');
+          pacman.direction = 'left';
+        }
+    }
+    if (cursors.right.isDown){
+        player.body.velocity.x = pacman.velocityPlayer;
+        //  Move to the right
+        if (canGo('right',player,layer,map)){
+          player.body.velocity.x = pacman.velocityPlayer;
+          player.body.velocity.y = 0;
+          player.animations.play('right');
+          pacman.direction = 'right';
+        }
+    }
+    if (cursors.up.isDown){
+        player.body.velocity.y = -pacman.velocityPlayer;
+        //  Move up
+        if (canGo('up',player,layer,map)){
+          player.body.velocity.y = -pacman.velocityPlayer;
+          player.body.velocity.x = 0;
+          player.animations.play('up');
+          pacman.direction = 'up';
+        }
+    }
+    if (cursors.down.isDown){
+        player.body.velocity.y = pacman.velocityPlayer;
+        //  Move down
+        if (canGo('down',player,layer,map)){
+          player.body.velocity.y = pacman.velocityPlayer;
+          player.body.velocity.x = 0;
+          player.animations.play('down');
+          pacman.direction = 'down';
+        }
+    }
 }
 
 function update() {
@@ -118,45 +174,5 @@ function update() {
 
   isStick(player,layer,map);
 
-  //Actuellement ne fonctionne presque correctement qu'à gauche, les autres directions c'est un peu random
-  if (cursors.left.isDown){
-      player.body.velocity.x = -30;
-      //  Move to the left
-      if (canGo('left',player,layer,map)){
-        player.body.velocity.x = -30;
-        player.body.velocity.y = 0;
-        player.animations.play('left');
-        pacman.direction = 'left';
-      }
-  }
-  if (cursors.right.isDown){
-      player.body.velocity.x = 30;
-      //  Move to the right
-      if (canGo('right',player,layer,map)){
-        player.body.velocity.x = 30;
-        player.body.velocity.y = 0;
-        player.animations.play('right');
-        pacman.direction = 'right';
-      }
-  }
-  if (cursors.up.isDown){
-      player.body.velocity.y = -30;
-      //  Move up
-      if (canGo('up',player,layer,map)){
-        player.body.velocity.y = -30;
-        player.body.velocity.x = 0;
-        player.animations.play('up');
-        pacman.direction = 'up';
-      }
-  }
-  if (cursors.down.isDown){
-      player.body.velocity.y = 30;
-      //  Move down
-      if (canGo('down',player,layer,map)){
-        player.body.velocity.y = 30;
-        player.body.velocity.x = 0;
-        player.animations.play('down');
-        pacman.direction = 'down';
-      }
-  }
+  MovementHandler();
 }
