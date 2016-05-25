@@ -2,6 +2,8 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update
 });
 
+console.log(game);
+
 function preload() {
     game.load.tilemap('ClassicMap', '../assets/RoyalPac-mapV2.json', null, Phaser.Tilemap.TILED_JSON);
     game.load.image('tiles', '../assets/TileSet.png');
