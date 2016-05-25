@@ -75,8 +75,7 @@ function create() {
     pathfinder = game.plugins.add(Phaser.Plugin.PathFinderPlugin);
     pathfinder.setGrid(map.layers[0].data, walkables);
 
-
-    //INSTANCE DU PACMAN
+    //INSTANCE DU FANTOME
     fantomas = new fantome(game,layer,200,200);
     game.add.existing(fantomas);
     game.physics.arcade.collide(fantomas, layer);
