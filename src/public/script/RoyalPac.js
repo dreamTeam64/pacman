@@ -18,7 +18,7 @@ function preload() {
 var map;
 var layer;
 var player;
-var fantome;
+var fantomas;
 var tiles;
 var tileset;
 var cursors;
@@ -56,19 +56,6 @@ function create() {
     map.setCollision(2);
     map.setCollision(1);
 
-
-    //INSTANCE DES POINTS
-    points = game.add.group();
-    points.enableBody = true;
-    var i=0;
-    var j=0;
-    for (i = 0; i < 31; i++) {
-        for (j = 0; j < 24; j++) {
-            if (map.getTile(i,j,layer,true).index == 136) {
-                var point = points.create(i*25,j*25,'star');
-            }
-        }
-    }
     game.physics.arcade.collide(player, layer);
     player = game.add.sprite(375,375,'pacman');
 
@@ -89,12 +76,24 @@ function create() {
     pathfinder.setGrid(map.layers[0].data, walkables);
 
 
-    //INSTANCE DU Fantome
-    fantome = new pacman(game,layer,200,200);
-    game.add.existing(fantome);
-    game.physics.arcade.collide(fantome, layer);
-    game.physics.enable(fantome);
+    //INSTANCE DU PACMAN
+    fantomas = new fantome(game,layer,200,200);
+    game.add.existing(fantomas);
+    game.physics.arcade.collide(fantomas, layer);
+    game.physics.enable(fantomas);
 
+    //INSTANCE DES POINTS
+    points = game.add.group();
+    points.enableBody = true;
+    var i=0;
+    var j=0;
+    for (i = 0; i < 31; i++) {
+        for (j = 0; j < 24; j++) {
+            if (map.getTile(i,j,layer,true).index == 136) {
+                var point = points.create(i*25,j*25,'star');
+            }
+        }
+    }
 
 
     cursors = game.input.keyboard.createCursorKeys();
@@ -130,18 +129,17 @@ function isStick(player,layer,map){
     }
 }
 
-function Scoring(pacman,Point) {
+function Scoring(player,Point) {
     Point.kill(); //Enlever l'étoile
     score += 10;
     scoreText.text = 'score: '+ score;
 }
 
 function update() {
-  console.log(pathfinder);
   game.physics.arcade.collide(player, layer);
-  game.physics.arcade.collide(fantome, layer);
+  game.physics.arcade.collide(fantomas, layer);
   game.physics.arcade.overlap(player, points, function(player,point){
-    Scoring(pacman,point);
+    Scoring(player,point);
   }, null, this);
 
   isStick(player,layer,map);
@@ -154,7 +152,7 @@ function update() {
         player.body.velocity.x = -30;
         player.body.velocity.y = 0;
         player.animations.play('left');
-        pacman.direction = 'left';
+
       }
   }
   if (cursors.right.isDown){
@@ -164,7 +162,7 @@ function update() {
         player.body.velocity.x = 30;
         player.body.velocity.y = 0;
         player.animations.play('right');
-        pacman.direction = 'right';
+
       }
   }
   if (cursors.up.isDown){
@@ -174,7 +172,7 @@ function update() {
         player.body.velocity.y = -30;
         player.body.velocity.x = 0;
         player.animations.play('up');
-        pacman.direction = 'up';
+
       }
   }
   if (cursors.down.isDown){
@@ -184,7 +182,7 @@ function update() {
         player.body.velocity.y = 30;
         player.body.velocity.x = 0;
         player.animations.play('down');
-        pacman.direction = 'down';
+
       }
   }
 }

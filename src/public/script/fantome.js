@@ -1,11 +1,11 @@
-//constructeur de l'objet Pacman
-pacman = function(game,layer,x,y){
+//constructeur de l'objet fantome
+fantome = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
 
   this.speed_x = 0; //vitesse horizontal
   this.speed_y = 0; //vitesse vertical
 
-  //position du pacman
+  //position du fantome
   this.x = x;
   this.y = y;
 
@@ -23,20 +23,20 @@ pacman = function(game,layer,x,y){
   this.waitingHorizontalMovement = false;
 }
 
-//pacman hérite de l'objet Phaser.Sprite
-pacman.prototype = Object.create(Phaser.Sprite.prototype);
-pacman.prototype.constructor = pacman;
+//fantome hérite de l'objet Phaser.Sprite
+fantome.prototype = Object.create(Phaser.Sprite.prototype);
+fantome.prototype.constructor = fantome;
 
 //Ne fonctionne pas encore
-pacman.prototype.create = function(){
+fantome.prototype.create = function(){
   this.animations.add('left', [6, 5, 4], 10, true);
   this.animations.add('right', [9, 8, 7], 10, true);
   this.animations.add('down', [3, 2, 1], 10, true);
   this.animations.add('up', [12, 11, 10], 10, true);
 }
 
-//permet au pacman de vérifier autour de lui les passages
-pacman.prototype.canGo = function(direction, layer, map){
+//permet au fantome de vérifier autour de lui les passages
+fantome.prototype.canGo = function(direction, layer, map){
   if (direction == 'down') {
       return((map.getTileWorldXY(this.position.x + 24, this.position.y + 25, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x, this.position.y +25, 25, 25, layer).index == 136)); //down
   }
@@ -51,15 +51,15 @@ pacman.prototype.canGo = function(direction, layer, map){
   }
 }
 
-pacman.prototype.playerIsAbove = function(){
+fantome.prototype.playerIsAbove = function(){
   return (this.body.y < player.body.y);
 }
 
-pacman.prototype.isPlayerOnRight = function(){
+fantome.prototype.isPlayerOnRight = function(){
   return (this.body.x < player.body.x);
 }
 
-pacman.prototype.chooseWay = function(layer,map){
+fantome.prototype.chooseWay = function(layer,map){
     var res;
     console.log(this.canGo("up",layer,map));
     //console.log(this.canGo("down",layer,map));
@@ -109,7 +109,7 @@ pacman.prototype.chooseWay = function(layer,map){
 
 }
 
-pacman.prototype.moveUp = function(){
+fantome.prototype.moveUp = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
   this.speed_y = -0; //-50
   this.animations.play('up');
@@ -118,7 +118,7 @@ pacman.prototype.moveUp = function(){
   this.waitingHorizontalMovement = false;
 }
 
-pacman.prototype.moveDown = function(){
+fantome.prototype.moveDown = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
   this.speed_y = 0; // 50
   this.animations.play('Down');
@@ -127,7 +127,7 @@ pacman.prototype.moveDown = function(){
   this.waitingHorizontalMovement = true;
 }
 
-pacman.prototype.moveRight = function(){
+fantome.prototype.moveRight = function(){
   this.speed_y = 0;
   this.speed_x = 50;
   this.animations.play('right');
@@ -137,7 +137,7 @@ pacman.prototype.moveRight = function(){
 
 }
 
-pacman.prototype.moveLeft = function(){
+fantome.prototype.moveLeft = function(){
   this.speed_y = 0;
   this.speed_x = -50;
   this.animations.play('left');
@@ -146,7 +146,7 @@ pacman.prototype.moveLeft = function(){
   this.waitingHorizontalMovement = false;
 }
 
-pacman.prototype.update = function(){
+fantome.prototype.update = function(){
     //player est une variable globale, on peut donc y acceder sans passage par paramètre
 
     // console.log(player.body.x);
@@ -154,7 +154,7 @@ pacman.prototype.update = function(){
 
 
     //this.chooseWay(layer,map);
-    //Mouvement du pacman en x et y
+    //Mouvement du fantome en x et y
     this.body.velocity.x = this.speed_x;
     this.body.velocity.y = this.speed_y;
 
