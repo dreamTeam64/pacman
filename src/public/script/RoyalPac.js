@@ -18,7 +18,7 @@ function preload() {
 var map;
 var layer;
 var player;
-var pac;
+var fantome;
 var tiles;
 var tileset;
 var cursors;
@@ -89,11 +89,11 @@ function create() {
     pathfinder.setGrid(map.layers[0].data, walkables);
 
 
-    //INSTANCE DU PACMAN
-    pac = new pacman(game,layer,200,200);
-    game.add.existing(pac);
-    game.physics.arcade.collide(pac, layer);
-    game.physics.enable(pac);
+    //INSTANCE DU Fantome
+    fantome = new pacman(game,layer,200,200);
+    game.add.existing(fantome);
+    game.physics.arcade.collide(fantome, layer);
+    game.physics.enable(fantome);
 
 
 
@@ -139,7 +139,7 @@ function Scoring(pacman,Point) {
 function update() {
   console.log(pathfinder);
   game.physics.arcade.collide(player, layer);
-  game.physics.arcade.collide(pac, layer);
+  game.physics.arcade.collide(fantome, layer);
   game.physics.arcade.overlap(player, points, function(player,point){
     Scoring(pacman,point);
   }, null, this);
