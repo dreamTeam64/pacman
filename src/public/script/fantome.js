@@ -1,6 +1,9 @@
 //constructeur de l'objet fantome
 fantome = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
+  this.layer = layer;
+  this.game = game;
+
   this.velocityPlayer = 50; //Definit la vitesse du joueur
 
   this.speed_x = 0; //vitesse horizontal
@@ -13,11 +16,12 @@ fantome = function(game,layer,x,y){
   //calcul de la vitesse relative selon les axes X et Y
   this.relativeSpeed = 0;
 
-  this.actualMovement = 'right';
-
   //les objets nécessaire
   this.layer = layer;
   this.game = game;
+
+  //pathfinder
+  this.actualTile = null;
 
   //Permet d'éviter les conflits dans les décisions
   this.waitingVerticalMovement = true;
@@ -62,7 +66,7 @@ fantome.prototype.isPlayerOnRight = function(){
 
 fantome.prototype.chooseWay = function(layer,map){
     var res;
-    console.log(this.canGo("up",layer,map));
+    //console.log(this.canGo("up",layer,map));
     //console.log(this.canGo("down",layer,map));
     if (this.canGo("up",layer,map)) {
         this.moveUp();
@@ -148,13 +152,9 @@ fantome.prototype.moveLeft = function(){
 }
 
 fantome.prototype.update = function(){
-    //player est une variable globale, on peut donc y acceder sans passage par paramètre
-
-    // console.log(player.body.x);
-    // console.log(player.body.y);
-
-
-    //this.chooseWay(layer,map);
+  this.body.x = this.x;
+  this.body.y = this.y;
+  /*
     //Mouvement du fantome en x et y
     this.body.velocity.x = this.speed_x;
     this.body.velocity.y = this.speed_y;
@@ -162,12 +162,13 @@ fantome.prototype.update = function(){
     //formule de notre ami Pyhthagore, pour une fois que tu sert à quelque chose !
     this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
 
-    // console.log(this.playerIsAbove());
-    // console.log(this.isPlayerOnRight);
-
     this.chooseWay(layer,map);
 
     //mise à jour des coordonnées de l'objet
     this.y = this.body.y;
     this.x = this.body.x;
+    */
+
+    this.tile_x = Math.floor(this.x/25);
+    this.tile_y = Math.floor(this.y/25);
 }

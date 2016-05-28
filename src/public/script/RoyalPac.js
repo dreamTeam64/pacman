@@ -31,17 +31,16 @@ var pathfinder;
 var walkables;
 
 function findPathTo(tilex, tiley) {
+  pathfinder.setCallbackFunction(function(path) {
+      path = path || [];
+      for(var i = 0, ilen = path.length; i < ilen; i++) {
+          map.putTile(46, path[i].x, path[i].y);
+      }
+      blocked = false;
+  });
 
-    pathfinder.setCallbackFunction(function(path) {
-        path = path || [];
-        for(var i = 0, ilen = path.length; i < ilen; i++) {
-            map.putTile(46, path[i].x, path[i].y);
-        }
-        blocked = false;
-    });
-
-    pathfinder.preparePathCalculation([0,0], [tilex,tiley]);
-    pathfinder.calculatePath();
+  pathfinder.preparePathCalculation([0,0], [tilex,tiley]);
+  pathfinder.calculatePath();
 }
 
 function create() {
@@ -74,6 +73,7 @@ function create() {
 
     pathfinder = game.plugins.add(Phaser.Plugin.PathFinderPlugin);
     pathfinder.setGrid(map.layers[0].data, walkables);
+    console.log(pathfinder);
 
     //INSTANCE DU FANTOME
     fantomas = new fantome(game,layer,200,200);
@@ -184,4 +184,16 @@ function update() {
 
       }
   }
+  setInterval(function(){
+    pathfinder.setCallbackFunction(function(path) {
+      console.log("Hellow Wordl");
+      console.log(path[1].x);
+      console.log(path[1].y);
+      fantomas.x = path[1].x * 25;
+      fantomas.y = path[1].y * 25;
+    });
+    pathfinder.preparePathCalculation([fantomas.tile_x,fantomas.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
+    pathfinder.calculatePath();
+  },10000);
+
 }
