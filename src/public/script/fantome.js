@@ -116,7 +116,7 @@ fantome.prototype.chooseWay = function(layer,map){
 
 fantome.prototype.moveUp = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
-  this.speed_y = -0; //-50
+  this.speed_y = -40; //-50
   this.animations.play('up');
 
   this.waitingVerticalMovement = true;
@@ -125,7 +125,7 @@ fantome.prototype.moveUp = function(){
 
 fantome.prototype.moveDown = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
-  this.speed_y = 0; // 50
+  this.speed_y = -40; // 50
   this.animations.play('Down');
 
   this.waitingVerticalMovement = false;
@@ -134,7 +134,7 @@ fantome.prototype.moveDown = function(){
 
 fantome.prototype.moveRight = function(){
   this.speed_y = 0;
-  this.speed_x = 50;
+  this.speed_x = 40;
   this.animations.play('right');
 
   this.waitingVerticalMovement = true;
@@ -144,17 +144,20 @@ fantome.prototype.moveRight = function(){
 
 fantome.prototype.moveLeft = function(){
   this.speed_y = 0;
-  this.speed_x = -50;
+  this.speed_x = -40;
   this.animations.play('left');
 
   this.waitingVerticalMovement = true;
   this.waitingHorizontalMovement = false;
 }
 
+fantome.prototype.resetPosTile = function(){
+  this.body.x = Math.floor(this.x);
+  this.body.y = Math.floor(this.y);
+}
+
 fantome.prototype.update = function(){
-  this.body.x = this.x;
-  this.body.y = this.y;
-  /*
+
     //Mouvement du fantome en x et y
     this.body.velocity.x = this.speed_x;
     this.body.velocity.y = this.speed_y;
@@ -162,13 +165,17 @@ fantome.prototype.update = function(){
     //formule de notre ami Pyhthagore, pour une fois que tu sert à quelque chose !
     this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
 
-    this.chooseWay(layer,map);
-
     //mise à jour des coordonnées de l'objet
     this.y = this.body.y;
     this.x = this.body.x;
-    */
+
 
     this.tile_x = Math.floor(this.x/25);
     this.tile_y = Math.floor(this.y/25);
+
+    console.log(this.relativeSpeed);
+
+    if(this.relativeSpeed == 0){
+      this.resetPosTile();
+    }
 }

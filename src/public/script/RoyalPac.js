@@ -98,6 +98,37 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
+
+    setInterval(function(){
+      pathfinder.setCallbackFunction(function(path) {
+        console.log("Hellow Wordl");
+        console.log(path[1].x);
+        console.log(path[1].y);
+
+        var goToX = path[1].x * 25;
+        var goToY = path[1].y * 25;
+
+        if (goToX > fantomas.x) {
+          fantomas.moveRight();
+        } else if (goToX < fantomas.x){
+          fantomas.moveLeft();
+        } else {
+          fantomas.speed_x = 0;
+        }
+
+        if (goToY > fantomas.y) {
+          fantomas.moveDown();
+        } else if (goToY < fantomas.y){
+          fantomas.moveUp();
+        } else {
+          fantomas.speed_y = 0;
+        }
+
+
+      });
+      pathfinder.preparePathCalculation([fantomas.tile_x,fantomas.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
+      pathfinder.calculatePath();
+    },400);
 }
 
 function canGo(direction, player, layer, map){
@@ -133,6 +164,8 @@ function Scoring(player,Point) {
     score += 10;
     scoreText.text = 'score: '+ score;
 }
+
+
 
 function update() {
   game.physics.arcade.collide(player, layer);
@@ -184,16 +217,6 @@ function update() {
 
       }
   }
-  setInterval(function(){
-    pathfinder.setCallbackFunction(function(path) {
-      console.log("Hellow Wordl");
-      console.log(path[1].x);
-      console.log(path[1].y);
-      fantomas.x = path[1].x * 25;
-      fantomas.y = path[1].y * 25;
-    });
-    pathfinder.preparePathCalculation([fantomas.tile_x,fantomas.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
-    pathfinder.calculatePath();
-  },10000);
+
 
 }
