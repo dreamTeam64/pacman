@@ -23,8 +23,7 @@ fantome = function(game,layer,x,y){
   //pathfinder
   this.actualTile = null;
 
-  map.setCollision(136);
-  //this.scale.setTo(0.5,0.5);
+  this.scale.setTo(1,1);
 
   //this.animations.add('left', [6, 5, 4], 10, true);
   //this.animations.add('right', [9, 8, 7], 10, true);

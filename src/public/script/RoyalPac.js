@@ -30,22 +30,17 @@ var blocked = false;
 var pathfinder;
 var walkables;
 
-function findPathTo(tilex, tiley) {
-  pathfinder.setCallbackFunction(function(path) {
-      path = path || [];
-      for(var i = 0, ilen = path.length; i < ilen; i++) {
-          map.putTile(46, path[i].x, path[i].y);
-      }
-      blocked = false;
-  });
-
-  pathfinder.preparePathCalculation([0,0], [tilex,tiley]);
-  pathfinder.calculatePath();
-}
-
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
+    //creation map vu du fantome
+    mapF = game.add.tilemap('ClassicMap', 'tiles');
+    mapF.addTilesetImage('TileSet', 'tiles');
+    layerF = mapF.createLayer('Calque de Tile 1');
+    layerF.resizeWorld();
+    mapF.setCollision(136);
+    mapF.setCollision(1);
+    mapF.setCollision(2);
     //Création Map
     map = game.add.tilemap('ClassicMap', 'tiles');
     map.addTilesetImage('TileSet', 'tiles');
@@ -78,7 +73,7 @@ function create() {
     //INSTANCE DU FANTOME
     fantomas = new fantome(game,layer,200,200);
     game.add.existing(fantomas);
-    game.physics.arcade.collide(fantomas, layer);
+    game.physics.arcade.collide(fantomas, layerF);
     game.physics.enable(fantomas);
 
     //INSTANCE DES POINTS
@@ -106,7 +101,7 @@ function create() {
         console.log(path[1].y);
 
         for(var i = 0, ilen = path.length; i < ilen; i++) {
-            map.putTile(46, path[i].x, path[i].y);
+            mapF.putTile(46, path[i].x, path[i].y);
         }
 
         var goToX = path[1].x * 25;
@@ -134,7 +129,7 @@ function create() {
       });
       pathfinder.preparePathCalculation([fantomas.tile_x,fantomas.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
       pathfinder.calculatePath();
-    });
+    },500);
 }
 
 function canGo(direction, player, layer, map){
@@ -175,7 +170,8 @@ function Scoring(player,Point) {
 
 function update() {
   game.physics.arcade.collide(player, layer);
-  game.physics.arcade.collide(fantomas, layer);
+  console.log(layerF);
+  game.physics.arcade.collide(fantomas, layerF);
   game.physics.arcade.overlap(player, points, function(player,point){
     Scoring(player,point);
   }, null, this);
