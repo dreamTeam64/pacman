@@ -8,15 +8,28 @@
      <script type="text/javascript" src="/script/fantome.js"></script>
      <script type="text/javascript" src="/script/point.js"></script>
      <script type="text/javascript" src="/script/pathfinding.js"></script>
+     <script type="text/javascript" src="/scriptClient/terminal.js"></script>
      <script src="/socket.io/socket.io.js"></script>
      <link href="/css/style.css" rel="stylesheet" type="text/css" media="all">
    </head>
    <body>
      <script type="text/javascript">
        var socket = io.connect('http://localhost:8080');
+
+
+
        socket.on('message', function(message){
-         alert("message du serveur : " + message)
+         var terminal = document.getElementById('terminal');
+         var newMess = document.createElement('p');
+         //alert("message du serveur : " + message.content)
+         newMess.innerHTML = message.content;
+         terminal.appendChild(newMess);
        });
      </script>
+     <div id="terminal">
+      <input class="commandLine" type="text" name="commandLine" value="" onkeypress="return runScript(event)">
+      <center>  terminal </center>
+
+     </div>
    </body>
  </html>

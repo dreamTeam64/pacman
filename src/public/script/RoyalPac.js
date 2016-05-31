@@ -129,7 +129,9 @@ function create() {
       });
       pathfinder.preparePathCalculation([fantomas.tile_x,fantomas.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
       pathfinder.calculatePath();
-    },500);
+
+      //mapF.layers[0].data = map.layers[0].data;
+    });
 }
 
 function canGo(direction, player, layer, map){

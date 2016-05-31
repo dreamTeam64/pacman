@@ -28,10 +28,12 @@ app.use(function(req, res, next){
 
 var io = require('socket.io').listen(server);
 
-
 io.sockets.on('connection', function (socket) {
     console.log('Un client est connecté !');
-    socket.emit('message', 'Vous êtes bien connecté !');
+    socket.emit('message', {
+      content:'Vous êtes bien connecté !',
+      importance : 1
+    });
 });
 
 server.listen(8080);
