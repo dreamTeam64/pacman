@@ -60,7 +60,7 @@ function create() {
 
     game.physics.enable(player);
     player.body.collideWorldBounds = true;
-    // player.scale.setTo(0.95,0.95);
+    //player.scale.setTo(0.95,0.95);
     //player.body.collideWorldBounds = true;
     //player.body.setSize(23, 23, 0, 0);
     player.animations.add('left', [6, 5, 4], 10, true);
@@ -105,8 +105,15 @@ function create() {
         console.log(path[1].x);
         console.log(path[1].y);
 
+        for(var i = 0, ilen = path.length; i < ilen; i++) {
+            map.putTile(46, path[i].x, path[i].y);
+        }
+
         var goToX = path[1].x * 25;
         var goToY = path[1].y * 25;
+
+        console.log("fantomas est en (" +fantomas.x + "," + fantomas.y+")");
+        console.log("fantomas doit aller en (" +goToX + "," + goToY+")");
 
         if (goToX > fantomas.x) {
           fantomas.moveRight();
@@ -124,11 +131,10 @@ function create() {
           fantomas.speed_y = 0;
         }
 
-
       });
       pathfinder.preparePathCalculation([fantomas.tile_x,fantomas.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
       pathfinder.calculatePath();
-    },400);
+    });
 }
 
 function canGo(direction, player, layer, map){

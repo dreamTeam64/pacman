@@ -4,7 +4,7 @@ fantome = function(game,layer,x,y){
   this.layer = layer;
   this.game = game;
 
-  this.velocityPlayer = 50; //Definit la vitesse du joueur
+  this.velocityPlayer = 30; //Definit la vitesse du joueur
 
   this.speed_x = 0; //vitesse horizontal
   this.speed_y = 0; //vitesse vertical
@@ -23,22 +23,20 @@ fantome = function(game,layer,x,y){
   //pathfinder
   this.actualTile = null;
 
+  map.setCollision(136);
+  //this.scale.setTo(0.5,0.5);
+
+  //this.animations.add('left', [6, 5, 4], 10, true);
+  //this.animations.add('right', [9, 8, 7], 10, true);
+  //this.animations.add('down', [3, 2, 1], 10, true);
+  //this.animations.add('up', [12, 11, 10], 10, true);
+
   //Permet d'éviter les conflits dans les décisions
-  this.waitingVerticalMovement = true;
-  this.waitingHorizontalMovement = false;
 }
 
 //fantome hérite de l'objet Phaser.Sprite
 fantome.prototype = Object.create(Phaser.Sprite.prototype);
 fantome.prototype.constructor = fantome;
-
-//Ne fonctionne pas encore
-fantome.prototype.create = function(){
-  this.animations.add('left', [6, 5, 4], 10, true);
-  this.animations.add('right', [9, 8, 7], 10, true);
-  this.animations.add('down', [3, 2, 1], 10, true);
-  this.animations.add('up', [12, 11, 10], 10, true);
-}
 
 //permet au fantome de vérifier autour de lui les passages
 fantome.prototype.canGo = function(direction, layer, map){
@@ -110,50 +108,30 @@ fantome.prototype.chooseWay = function(layer,map){
                 }
             }
         }
-
-
 }
 
 fantome.prototype.moveUp = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
-  this.speed_y = -40; //-50
+  this.speed_y = -this.velocityPlayer; //-50
   this.animations.play('up');
-
-  this.waitingVerticalMovement = true;
-  this.waitingHorizontalMovement = false;
 }
 
 fantome.prototype.moveDown = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
-  this.speed_y = -40; // 50
+  this.speed_y = this.velocityPlayer; // 50
   this.animations.play('Down');
-
-  this.waitingVerticalMovement = false;
-  this.waitingHorizontalMovement = true;
 }
 
 fantome.prototype.moveRight = function(){
   this.speed_y = 0;
-  this.speed_x = 40;
+  this.speed_x = this.velocityPlayer;
   this.animations.play('right');
-
-  this.waitingVerticalMovement = true;
-  this.waitingHorizontalMovement = false;
-
 }
 
 fantome.prototype.moveLeft = function(){
   this.speed_y = 0;
-  this.speed_x = -40;
+  this.speed_x = -this.velocityPlayer;
   this.animations.play('left');
-
-  this.waitingVerticalMovement = true;
-  this.waitingHorizontalMovement = false;
-}
-
-fantome.prototype.resetPosTile = function(){
-  this.body.x = Math.floor(this.x);
-  this.body.y = Math.floor(this.y);
 }
 
 fantome.prototype.update = function(){
@@ -175,7 +153,4 @@ fantome.prototype.update = function(){
 
     console.log(this.relativeSpeed);
 
-    if(this.relativeSpeed == 0){
-      this.resetPosTile();
-    }
 }
