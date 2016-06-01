@@ -1,3 +1,19 @@
 body {
     margin: 0;
 }
+
+.commandLine{
+  width: 100%;
+  position: fixed;
+  top: 5px;
+}
+
+#terminal{
+  position: absolute;
+  background-color: black;
+  width: 350px;
+  height: 600px;
+  right: 0px;
+  top:0px;
+  color: green;
+}

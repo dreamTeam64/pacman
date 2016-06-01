@@ -32,23 +32,17 @@ var blocked = false;
 var pathfinder;
 var walkables;
 
-function findPathTo(tilex, tiley) {
-
-    pathfinder.setCallbackFunction(function(path) {
-        path = path || [];
-        for(var i = 0, ilen = path.length; i < ilen; i++) {
-            map.putTile(46, path[i].x, path[i].y);
-        }
-        blocked = false;
-    });
-
-    pathfinder.preparePathCalculation([0,0], [tilex,tiley]);
-    pathfinder.calculatePath();
-}
-
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
+    //creation map vu du fantome
+    mapF = game.add.tilemap('ClassicMap', 'tiles');
+    mapF.addTilesetImage('TileSet', 'tiles');
+    layerF = mapF.createLayer('Calque de Tile 1');
+    layerF.resizeWorld();
+    mapF.setCollision(136);
+    mapF.setCollision(1);
+    mapF.setCollision(2);
     //Création Map
     map = game.add.tilemap('ClassicMap', 'tiles');
     map.addTilesetImage('TileSet', 'tiles');
@@ -63,7 +57,7 @@ function create() {
 
     game.physics.enable(player);
     player.body.collideWorldBounds = true;
-    // player.scale.setTo(0.95,0.95);
+    //player.scale.setTo(0.95,0.95);
     //player.body.collideWorldBounds = true;
     //player.body.setSize(23, 23, 0, 0);
     player.animations.add('left', [6, 5, 4], 10, true);
@@ -76,11 +70,12 @@ function create() {
 
     pathfinder = game.plugins.add(Phaser.Plugin.PathFinderPlugin);
     pathfinder.setGrid(map.layers[0].data, walkables);
+    console.log(pathfinder);
 
     //INSTANCE DU FANTOME
     fantomas = new fantome(game,layer,200,200);
     game.add.existing(fantomas);
-    game.physics.arcade.collide(fantomas, layer);
+    game.physics.arcade.collide(fantomas, layerF);
     game.physics.enable(fantomas);
 
     PlacePoint();
@@ -89,6 +84,45 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
+
+    setInterval(function(){
+      pathfinder.setCallbackFunction(function(path) {
+        console.log("Hellow Wordl");
+        console.log(path[1].x);
+        console.log(path[1].y);
+
+        for(var i = 0, ilen = path.length; i < ilen; i++) {
+            mapF.putTile(46, path[i].x, path[i].y);
+        }
+
+        var goToX = path[1].x * 25;
+        var goToY = path[1].y * 25;
+
+        console.log("fantomas est en (" +fantomas.x + "," + fantomas.y+")");
+        console.log("fantomas doit aller en (" +goToX + "," + goToY+")");
+
+        if (goToX > fantomas.x) {
+          fantomas.moveRight();
+        } else if (goToX < fantomas.x){
+          fantomas.moveLeft();
+        } else {
+          fantomas.speed_x = 0;
+        }
+
+        if (goToY > fantomas.y) {
+          fantomas.moveDown();
+        } else if (goToY < fantomas.y){
+          fantomas.moveUp();
+        } else {
+          fantomas.speed_y = 0;
+        }
+
+      });
+      pathfinder.preparePathCalculation([fantomas.tile_x,fantomas.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
+      pathfinder.calculatePath();
+
+      //mapF.layers[0].data = map.layers[0].data;
+    });
 }
 
 function canGo(direction, player, layer, map){
@@ -121,7 +155,7 @@ function isStick(player,layer,map){
 
 function PlacePoint(){
     //INSTANCE DES POINTS
-    points= new point(game,layer,'simple',1,player,points,score,0);
+    // points= new point(game,layer,'simple',1,player,points,score,0);
     points = game.add.group();
     points.enableBody = true;
     var i=0;
@@ -159,7 +193,7 @@ function MovementHandler(){
           player.body.velocity.x = -velocityPlayer;
           player.body.velocity.y = 0;
           player.animations.play('left');
-          pacman.direction = 'left';
+          player.direction = 'left';
         }
     }
     if (cursors.right.isDown){
@@ -169,7 +203,7 @@ function MovementHandler(){
           player.body.velocity.x = velocityPlayer;
           player.body.velocity.y = 0;
           player.animations.play('right');
-          pacman.direction = 'right';
+          player.direction = 'right';
         }
     }
     if (cursors.up.isDown){
@@ -179,7 +213,7 @@ function MovementHandler(){
           player.body.velocity.y = -velocityPlayer;
           player.body.velocity.x = 0;
           player.animations.play('up');
-          pacman.direction = 'up';
+          player.direction = 'up';
         }
     }
     if (cursors.down.isDown){
@@ -189,15 +223,19 @@ function MovementHandler(){
           player.body.velocity.y = velocityPlayer;
           player.body.velocity.x = 0;
           player.animations.play('down');
-          pacman.direction = 'down';
+          player.direction = 'down';
         }
     }
 }
+
+
 
 function update() {
   console.log(pathfinder);
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(fantome, layer);
+  console.log(layerF);
+  game.physics.arcade.collide(fantomas, layerF);
   game.physics.arcade.overlap(player, points, function(player,point){
     Scoring(pacman,point);
   }, null, this);
@@ -205,4 +243,46 @@ function update() {
   isStick(player,layer,map);
 
   MovementHandler();
+  if (cursors.left.isDown){
+      player.body.velocity.x = -30;
+      //  Move to the left
+      if (canGo('left',player,layer,map)){
+        player.body.velocity.x = -30;
+        player.body.velocity.y = 0;
+        player.animations.play('left');
+
+      }
+  }
+  if (cursors.right.isDown){
+      player.body.velocity.x = 30;
+      //  Move to the right
+      if (canGo('right',player,layer,map)){
+        player.body.velocity.x = 30;
+        player.body.velocity.y = 0;
+        player.animations.play('right');
+
+      }
+  }
+  if (cursors.up.isDown){
+      player.body.velocity.y = -30;
+      //  Move up
+      if (canGo('up',player,layer,map)){
+        player.body.velocity.y = -30;
+        player.body.velocity.x = 0;
+        player.animations.play('up');
+
+      }
+  }
+  if (cursors.down.isDown){
+      player.body.velocity.y = 30;
+      //  Move down
+      if (canGo('down',player,layer,map)){
+        player.body.velocity.y = 30;
+        player.body.velocity.x = 0;
+        player.animations.play('down');
+
+      }
+  }
+
+
 }

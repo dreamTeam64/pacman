@@ -1,7 +1,11 @@
 //constructeur de l'objet fantome
-fantome = function(game,layer,zx,y){
+fantome = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
   this.velocityPlayer = 50; //Definit la vitesse du -p-a-c-m-a-n- fantome du coup putain
+  this.layer = layer;
+  this.game = game;
+
+  this.velocityPlayer = 30; //Definit la vitesse du joueur
 
   this.speed_x = 0; //vitesse horizontal
   this.speed_y = 0; //vitesse vertical
@@ -13,28 +17,26 @@ fantome = function(game,layer,zx,y){
   //calcul de la vitesse relative selon les axes X et Y
   this.relativeSpeed = 0;
 
-  this.actualMovement = 'right';
-
   //les objets nécessaire
   this.layer = layer;
   this.game = game;
 
+  //pathfinder
+  this.actualTile = null;
+
+  this.scale.setTo(1,1);
+
+  //this.animations.add('left', [6, 5, 4], 10, true);
+  //this.animations.add('right', [9, 8, 7], 10, true);
+  //this.animations.add('down', [3, 2, 1], 10, true);
+  //this.animations.add('up', [12, 11, 10], 10, true);
+
   //Permet d'éviter les conflits dans les décisions
-  this.waitingVerticalMovement = true;
-  this.waitingHorizontalMovement = false;
 }
 
 //fantome hérite de l'objet Phaser.Sprite
 fantome.prototype = Object.create(Phaser.Sprite.prototype);
 fantome.prototype.constructor = fantome;
-
-//Ne fonctionne pas encore
-fantome.prototype.create = function(){
-  this.animations.add('left', [6, 5, 4], 10, true);
-  this.animations.add('right', [9, 8, 7], 10, true);
-  this.animations.add('down', [3, 2, 1], 10, true);
-  this.animations.add('up', [12, 11, 10], 10, true);
-}
 
 //permet au fantome de vérifier autour de lui les passages
 fantome.prototype.canGo = function(direction, layer, map){
@@ -62,7 +64,7 @@ fantome.prototype.isPlayerOnRight = function(){
 
 fantome.prototype.chooseWay = function(layer,map){
     var res;
-    console.log(this.canGo("up",layer,map));
+    //console.log(this.canGo("up",layer,map));
     //console.log(this.canGo("down",layer,map));
     if (this.canGo("up",layer,map)) {
         this.moveUp();
@@ -106,55 +108,34 @@ fantome.prototype.chooseWay = function(layer,map){
                 }
             }
         }
-
-
 }
 
 fantome.prototype.moveUp = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
-  this.speed_y = -0; //-50
+  this.speed_y = -this.velocityPlayer; //-50
   this.animations.play('up');
-
-  this.waitingVerticalMovement = true;
-  this.waitingHorizontalMovement = false;
 }
 
 fantome.prototype.moveDown = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
-  this.speed_y = 0; // 50
+  this.speed_y = this.velocityPlayer; // 50
   this.animations.play('Down');
-
-  this.waitingVerticalMovement = false;
-  this.waitingHorizontalMovement = true;
 }
 
 fantome.prototype.moveRight = function(){
   this.speed_y = 0;
-  this.speed_x = 50;
+  this.speed_x = this.velocityPlayer;
   this.animations.play('right');
-
-  this.waitingVerticalMovement = true;
-  this.waitingHorizontalMovement = false;
-
 }
 
 fantome.prototype.moveLeft = function(){
   this.speed_y = 0;
-  this.speed_x = -50;
+  this.speed_x = -this.velocityPlayer;
   this.animations.play('left');
-
-  this.waitingVerticalMovement = true;
-  this.waitingHorizontalMovement = false;
 }
 
 fantome.prototype.update = function(){
-    //player est une variable globale, on peut donc y acceder sans passage par paramètre
 
-    // console.log(player.body.x);
-    // console.log(player.body.y);
-
-
-    //this.chooseWay(layer,map);
     //Mouvement du fantome en x et y
     this.body.velocity.x = this.speed_x;
     this.body.velocity.y = this.speed_y;
@@ -162,12 +143,14 @@ fantome.prototype.update = function(){
     //formule de notre ami Pyhthagore, pour une fois que tu sert à quelque chose !
     this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
 
-    // console.log(this.playerIsAbove());
-    // console.log(this.isPlayerOnRight);
-
-    this.chooseWay(layer,map);
-
     //mise à jour des coordonnées de l'objet
     this.y = this.body.y;
     this.x = this.body.x;
+
+
+    this.tile_x = Math.floor(this.x/25);
+    this.tile_y = Math.floor(this.y/25);
+
+    console.log(this.relativeSpeed);
+
 }
