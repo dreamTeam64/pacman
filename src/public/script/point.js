@@ -1,4 +1,4 @@
-point = function(game,layer,type,value,player,points,score){
+point = function(game,layer,type,value,player,score,howLeft){
     //this.hit = false;
     var type = type; // Simple ou Fruit
     var value = value; // 1, ou 50 pour le fruit
@@ -6,7 +6,7 @@ point = function(game,layer,type,value,player,points,score){
     var game = game;
     var layer = layer;
     var player = player;
-    var howLeft = howLeft
+    var howLeft = howLeft;
 
     this.score = score;
 
