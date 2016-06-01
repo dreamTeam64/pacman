@@ -25,8 +25,9 @@ var cursors;
 var points;
 var score = 0;
 var scoreText;
+var howLeft=1;
 
-var velocityPlayer = 50; //Definit la vitesse du joueur
+var velocityPlayer = 200; //Definit la vitesse du joueur
 
 var blocked = false;
 var pathfinder;
@@ -42,15 +43,14 @@ function create() {
     layerF.resizeWorld();
     mapF.setCollision(136);
     mapF.setCollision(1);
-    mapF.setCollision(2);
     //Création Map
     map = game.add.tilemap('ClassicMap', 'tiles');
     map.addTilesetImage('TileSet', 'tiles');
     layer = map.createLayer('Calque de Tile 1');
     layer.resizeWorld();
 
-    map.setCollision(2);
     map.setCollision(1);
+    map.setCollision(69);
 
     game.physics.arcade.collide(player, layer);
     player = game.add.sprite(375,375,'pacman');
@@ -86,7 +86,7 @@ function create() {
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
 
     setInterval(function(){
-      pathfinder.setCallbackFunction(function(path) {
+        pathfinder.setCallbackFunction(function(path) {
         console.log("Hellow Wordl");
         console.log(path[1].x);
         console.log(path[1].y);
@@ -155,7 +155,6 @@ function isStick(player,layer,map){
 
 function PlacePoint(){
     //INSTANCE DES POINTS
-    // points= new point(game,layer,'simple',1,player,points,score,0);
     points = game.add.group();
     points.enableBody = true;
     var i=0;
@@ -164,28 +163,27 @@ function PlacePoint(){
         for (j = 0; j < 24; j++) {
             if (map.getTile(i,j,layer,true).index == 136) {
                 var point = points.create(i*25,j*25,'star');
-                points.howLeft++;
-                console.log(points.howLeft);
+                howLeft = howLeft+10;
             }
         }
     }
+    howLeft=howLeft-1;
 }
 
-function Reset(Point){
-    if (Point.howLeft == 0) {
+function Reset(howLeft){ // Todo: Freeze Time + animation of replacing points
+    if (howLeft == 0) {
         PlacePoint();
     }
 }
 
-function Scoring(pacman,Point) {
+function Scoring(player,Point) {
     Point.kill(); //Enlever l'étoile
     score += 10;
     scoreText.text = 'score: '+ score;
-    Point.howLeft--;
+    howLeft=howLeft-10;
 }
 
 function MovementHandler(){
-    var velocityPlayer = 30;
     if (cursors.left.isDown){
         player.body.velocity.x = -velocityPlayer;
         //  Move to the left
@@ -228,8 +226,6 @@ function MovementHandler(){
     }
 }
 
-
-
 function update() {
   //console.log(pathfinder);
   game.physics.arcade.collide(player, layer);
@@ -237,12 +233,13 @@ function update() {
   //console.log(layerF);
   game.physics.arcade.collide(fantomas, layerF);
 
-  /*
-  game.physics.arcade.overlap(player, points, function(player,point){
-    Scoring(pacman,point);
+
+  game.physics.arcade.overlap(player, points, function(player,points){
+    Scoring(player,points);
   }, null, this);
-  */
+
   //isStick(player,layer,map);
 
   MovementHandler();
+  Reset(howLeft);
 }

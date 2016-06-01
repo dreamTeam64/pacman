@@ -1,4 +1,4 @@
-point = function(game,layer,type,value,player,score,howLeft){
+point = function(game,layer,type,value,player,score){
     //this.hit = false;
     this.type = type; // Simple ou Fruit
     this.value = value; // 1, ou 50 pour le fruit
@@ -6,7 +6,6 @@ point = function(game,layer,type,value,player,score,howLeft){
     this.game = game;
     this.layer = layer;
     this.player = player;
-    this.howLeft = howLeft;
 
     this.score = score;
 
@@ -30,6 +29,8 @@ point.prototype.create = function () {
     }
 };
 */
+
+
 point.prototype.update = function(){
-    this.game.physics.arcade.overlap(this.player,this.points,Scoring,null,this);
+    //this.game.physics.arcade.overlap(this.player,this.points,Scoring,null,this);
 }
