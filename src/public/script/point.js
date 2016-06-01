@@ -1,12 +1,12 @@
 point = function(game,layer,type,value,player,score,howLeft){
     //this.hit = false;
-    var type = type; // Simple ou Fruit
-    var value = value; // 1, ou 50 pour le fruit
+    this.type = type; // Simple ou Fruit
+    this.value = value; // 1, ou 50 pour le fruit
 
-    var game = game;
-    var layer = layer;
-    var player = player;
-    var howLeft = howLeft;
+    this.game = game;
+    this.layer = layer;
+    this.player = player;
+    this.howLeft = howLeft;
 
     this.score = score;
 
