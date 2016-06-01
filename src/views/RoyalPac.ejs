@@ -21,8 +21,12 @@
        socket.on('message', function(message){
          var terminal = document.getElementById('terminal');
          var newMess = document.createElement('p');
+         var d = new Date();
+
+
          //alert("message du serveur : " + message.content)
-         newMess.innerHTML = message.content;
+         newMess.innerHTML = d.getDate()+"/"+d.getDay()+"/"+ d.getFullYear() + " : " + message.content;
+
          terminal.appendChild(newMess);
        });
      </script>
