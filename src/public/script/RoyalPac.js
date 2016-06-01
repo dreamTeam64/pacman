@@ -171,8 +171,7 @@ function PlacePoint(){
     }
 }
 
-function Reset(Point)
-{
+function Reset(Point){
     if (Point.howLeft == 0) {
         PlacePoint();
     }
@@ -186,6 +185,7 @@ function Scoring(pacman,Point) {
 }
 
 function MovementHandler(){
+    var velocityPlayer = 30;
     if (cursors.left.isDown){
         player.body.velocity.x = -velocityPlayer;
         //  Move to the left
@@ -231,58 +231,18 @@ function MovementHandler(){
 
 
 function update() {
-  console.log(pathfinder);
+  //console.log(pathfinder);
   game.physics.arcade.collide(player, layer);
   game.physics.arcade.collide(fantome, layer);
-  console.log(layerF);
+  //console.log(layerF);
   game.physics.arcade.collide(fantomas, layerF);
+
+  /*
   game.physics.arcade.overlap(player, points, function(player,point){
     Scoring(pacman,point);
   }, null, this);
-
-  isStick(player,layer,map);
+  */
+  //isStick(player,layer,map);
 
   MovementHandler();
-  if (cursors.left.isDown){
-      player.body.velocity.x = -30;
-      //  Move to the left
-      if (canGo('left',player,layer,map)){
-        player.body.velocity.x = -30;
-        player.body.velocity.y = 0;
-        player.animations.play('left');
-
-      }
-  }
-  if (cursors.right.isDown){
-      player.body.velocity.x = 30;
-      //  Move to the right
-      if (canGo('right',player,layer,map)){
-        player.body.velocity.x = 30;
-        player.body.velocity.y = 0;
-        player.animations.play('right');
-
-      }
-  }
-  if (cursors.up.isDown){
-      player.body.velocity.y = -30;
-      //  Move up
-      if (canGo('up',player,layer,map)){
-        player.body.velocity.y = -30;
-        player.body.velocity.x = 0;
-        player.animations.play('up');
-
-      }
-  }
-  if (cursors.down.isDown){
-      player.body.velocity.y = 30;
-      //  Move down
-      if (canGo('down',player,layer,map)){
-        player.body.velocity.y = 30;
-        player.body.velocity.x = 0;
-        player.animations.play('down');
-
-      }
-  }
-
-
 }
