@@ -2,7 +2,7 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update
 });
 
-console.log(game);
+// console.log(game);
 
 function preload() {
     game.load.tilemap('ClassicMap', '../assets/RoyalPac-mapV2.json', null, Phaser.Tilemap.TILED_JSON);
@@ -26,6 +26,8 @@ var points;
 var score = 0;
 var scoreText;
 var howLeft=1;
+var level =1;
+var levelText;
 
 var velocityPlayer = 200; //Definit la vitesse du joueur
 
@@ -70,7 +72,7 @@ function create() {
 
     pathfinder = game.plugins.add(Phaser.Plugin.PathFinderPlugin);
     pathfinder.setGrid(map.layers[0].data, walkables);
-    console.log(pathfinder);
+    // console.log(pathfinder);
 
     //INSTANCE DU FANTOME
     fantomas = new fantome(game,layer,200,200);
@@ -84,12 +86,13 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
-
+    levelText = game.add.text(375,0,'current level: ', {fontSize: '24px', fill: '#111'});
+    levelText.text = 'current level: '+ level;
     setInterval(function(){
         pathfinder.setCallbackFunction(function(path) {
-        console.log("Hellow Wordl");
-        console.log(path[1].x);
-        console.log(path[1].y);
+        // console.log("Hellow Wordl");
+        // console.log(path[1].x);
+        // console.log(path[1].y);
 
         for(var i = 0, ilen = path.length; i < ilen; i++) {
             mapF.putTile(46, path[i].x, path[i].y);
@@ -98,8 +101,8 @@ function create() {
         var goToX = path[1].x * 25;
         var goToY = path[1].y * 25;
 
-        console.log("fantomas est en (" +fantomas.x + "," + fantomas.y+")");
-        console.log("fantomas doit aller en (" +goToX + "," + goToY+")");
+        // console.log("fantomas est en (" +fantomas.x + "," + fantomas.y+")");
+        // console.log("fantomas doit aller en (" +goToX + "," + goToY+")");
 
         if (goToX > fantomas.x) {
           fantomas.moveRight();
@@ -155,24 +158,34 @@ function isStick(player,layer,map){
 
 function PlacePoint(){
     //INSTANCE DES POINTS
+
+
     points = game.add.group();
     points.enableBody = true;
     var i=0;
     var j=0;
     for (i = 0; i < 31; i++) {
-        for (j = 0; j < 24; j++) {
-            if (map.getTile(i,j,layer,true).index == 136) {
-                var point = points.create(i*25,j*25,'star');
-                howLeft = howLeft+10;
+            for (j = 0; j < 24; j++) {
+                console.log("player.position.x = "+player.position.x);
+                console.log("player.position.y = "+player.position.y);
+                if ((i*25==player.position.x) && (j*25==player.position.y)) {
+                    i++;
+                }
+                if (map.getTile(i,j,layer,true).index == 136) {
+                        var point = points.create(i*25,j*25,'star');
+                        howLeft = howLeft+10;
+                }
             }
-        }
     }
+
     howLeft=howLeft-1;
 }
 
 function Reset(howLeft){ // Todo: Freeze Time + animation of replacing points
     if (howLeft == 0) {
         PlacePoint();
+        level++;
+        levelText.text = 'current level: '+ level;
     }
 }
 
