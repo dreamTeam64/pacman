@@ -88,7 +88,6 @@ function create() {
 
     PlacePoint();
 
-
     cursors = game.input.keyboard.createCursorKeys();
 
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});

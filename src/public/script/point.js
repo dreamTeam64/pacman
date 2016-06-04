@@ -1,17 +1,19 @@
 point = function(game,layer){
-  this.game = game;
-  this.layer = layer;
+  this.game = game; //objet du jeu
+  this.layer = layer; //layer vu par le joueur
 
-  this.score = score;
-  this.scoreText = null;
+  this.score = 0; //initialisation du score
+  this.scoreText = null; //initialiser de l'objet texte
 
-  points.game.add.group();
+  points.game.add.group(); //creation du groupe de point
 
+  //fonction permettant de placer les points lors d'un nouveau niveau
   this.PlacePoint = function(){
-
-    superPoint = game.add.group();
+    //creation des superPoint
+    superPoint = game.add.group(); //superpoint est une variable globale
     superPoint.enableBody = true;
 
+    //creation des points
     points = game.add.group();
     points.enableBody = true;
 
@@ -19,8 +21,9 @@ point = function(game,layer){
     var j=0;
     var GrosPoint;
 
+    //placement de grosPoint avec repartition aléatoire sur la map
     do {
-        GrosPoint = Math.floor((Math.random() * 25));
+        GrosPoint = Math.floor((Math.random() * 25)); //nombre random entre 0 et 24
     } while ((map.getTile(GrosPoint,GrosPoint,layer,true).index!=136)||(map.getTile(GrosPoint,GrosPoint,layer,true).index==1)||(map.getTile(GrosPoint,GrosPoint,layer,true).index==69));
 
     for (i = 0; i < 31; i++) {
@@ -38,7 +41,6 @@ point = function(game,layer){
           }
       }
     }
-
     this.howLeft -= 1;
   }
 
