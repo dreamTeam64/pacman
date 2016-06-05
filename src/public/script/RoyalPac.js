@@ -53,7 +53,6 @@ function initPlayerLayerMap(){
   map.addTilesetImage('TileSet', 'tiles');
   layer = map.createLayer('Calque de Tile 1');
   layer.resizeWorld();
-
   map.setCollision(1);
   map.setCollision(69);
 }
