@@ -200,6 +200,7 @@ function Reset(howLeft){ // Todo: Freeze Time + animation of replacing points
         PlacePoint();
         level++;
         levelText.text = 'current level: '+ level;
+        velocityPlayer +=100;
     }
 }
 
