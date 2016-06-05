@@ -39,52 +39,55 @@ var walkables;
 var superPoint;
 var superPointValue=50;
 
+function initFantomLayerMap(){
+  mapF = game.add.tilemap('ClassicMap', 'tiles');
+  mapF.addTilesetImage('TileSet', 'tiles');
+  layerF = mapF.createLayer('Calque de Tile 1');
+  layerF.resizeWorld();
+  mapF.setCollision(136);
+  mapF.setCollision(1);
+}
+
+function initPlayerLayerMap(){
+  map = game.add.tilemap('ClassicMap', 'tiles');
+  map.addTilesetImage('TileSet', 'tiles');
+  layer = map.createLayer('Calque de Tile 1');
+  layer.resizeWorld();
+
+  map.setCollision(1);
+  map.setCollision(69);
+}
+
+function initPlayerProperties(){
+  player.body.collideWorldBounds = true;
+  player.animations.add('left', [6, 5, 4], 10, true);
+  player.animations.add('right', [9, 8, 7], 10, true);
+  player.animations.add('down', [3, 2, 1], 10, true);
+  player.animations.add('up', [12, 11, 10], 10, true);
+}
+
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
-
-    //creation map vu du fantome
-    mapF = game.add.tilemap('ClassicMap', 'tiles');
-    mapF.addTilesetImage('TileSet', 'tiles');
-    layerF = mapF.createLayer('Calque de Tile 1');
-    layerF.resizeWorld();
-    mapF.setCollision(136);
-    mapF.setCollision(1);
+    //Initialisation de la vue pour les fantomes
+    initFantomLayerMap();
     //Création Map
-    map = game.add.tilemap('ClassicMap', 'tiles');
-    map.addTilesetImage('TileSet', 'tiles');
-    layer = map.createLayer('Calque de Tile 1');
-    layer.resizeWorld();
+    initPlayerLayerMap();
 
-    map.setCollision(1);
-    map.setCollision(69);
-
-    game.physics.arcade.collide(player, layer);
+    //Ajout du player et init
     player = game.add.sprite(375,375,'pacman');
-
-    // superPoint = game.add.sprite(375,375,'diamond');
-
     game.physics.enable(player);
-    player.body.collideWorldBounds = true;
-    //player.scale.setTo(0.95,0.95);
-    //player.body.collideWorldBounds = true;
-    //player.body.setSize(23, 23, 0, 0);
-    player.animations.add('left', [6, 5, 4], 10, true);
-    player.animations.add('right', [9, 8, 7], 10, true);
-    player.animations.add('down', [3, 2, 1], 10, true);
-    player.animations.add('up', [12, 11, 10], 10, true);
+    initPlayerProperties();
+
+    //superPoint = game.add.sprite(375,375,'diamond');
 
     //gestion du pathfinder
-    walkables = [136];
-
-    pathfinder = game.plugins.add(Phaser.Plugin.PathFinderPlugin);
-    pathfinder.setGrid(map.layers[0].data, walkables);
+    walkables = [136];//définition des tiles où l'on peut marcher
+    pathfinder = game.plugins.add(Phaser.Plugin.PathFinderPlugin);//ajout du plugin
+    pathfinder.setGrid(map.layers[0].data, walkables);//creation du graphe
     // console.log(pathfinder);
 
     //INSTANCE DU FANTOME
     fantomas = new fantome(game,layer,200,200);
-    game.add.existing(fantomas);
-    game.physics.arcade.collide(fantomas, layerF);
-    game.physics.enable(fantomas);
 
     PlacePoint();
 
@@ -93,6 +96,7 @@ function create() {
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
     levelText = game.add.text(375,0,'current level: ', {fontSize: '24px', fill: '#111'});
     levelText.text = 'current level: '+ level;
+    console.log(fantomas);
     setInterval(function(){
         pathfinder.setCallbackFunction(function(path) {
         // console.log("Hellow Wordl");

@@ -1,7 +1,6 @@
 //constructeur de l'objet fantome
-fantome = function(game,layer,x,y){
+var fantome = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
-  this.velocityPlayer = 50; //Definit la vitesse du -p-a-c-m-a-n- fantome du coup putain
   this.layer = layer;
   this.game = game;
 
@@ -18,20 +17,12 @@ fantome = function(game,layer,x,y){
   this.relativeSpeed = 0;
 
   //les objets nécessaire
-  this.layer = layer;
+  this.layer = layerF;
   this.game = game;
 
-  //pathfinder
-  this.actualTile = null;
+  game.add.existing(this);
+  game.physics.enable(this);
 
-  this.scale.setTo(1,1);
-
-  //this.animations.add('left', [6, 5, 4], 10, true);
-  //this.animations.add('right', [9, 8, 7], 10, true);
-  //this.animations.add('down', [3, 2, 1], 10, true);
-  //this.animations.add('up', [12, 11, 10], 10, true);
-
-  //Permet d'éviter les conflits dans les décisions
 }
 
 //fantome hérite de l'objet Phaser.Sprite
@@ -60,54 +51,6 @@ fantome.prototype.playerIsAbove = function(){
 
 fantome.prototype.isPlayerOnRight = function(){
   return (this.body.x < player.body.x);
-}
-
-fantome.prototype.chooseWay = function(layer,map){
-    var res;
-    //console.log(this.canGo("up",layer,map));
-    //console.log(this.canGo("down",layer,map));
-    if (this.canGo("up",layer,map)) {
-        this.moveUp();
-    }
-    // if (this.canGo("down",layer,map)) {
-    //     this.moveDown();
-    // }
-    if (this.playerIsAbove()) {
-        if (this.isPlayerOnRight()) {
-            //A droite
-            if (this.canGo("up",layer,map)) {
-                this.moveUp();
-            }
-            if (this.canGo("right",layer,map)) {
-                this.moveRight();
-            }
-        } else {
-            //A gauche
-                if (this.canGo("up",layer,map)) {
-                    this.moveUp();
-                }
-                if (this.canGo("left",layer,map)) {
-                    this.moveLeft();
-                }
-            }
-    } else
-    { //cas de !PlayerIsAbove()
-        if (this.isPlayerOnRight()) {
-            if (this.canGo("down",layer,map)) {
-                this.moveDown();
-            }
-            if (this.canGo("right",layer,map)) {
-                this.moveRight();
-            }
-            } else { //cas de !isPlayerOnRight()
-                if (this.canGo("down",layer,map)) {
-                    this.moveDown();
-                }
-                if (this.canGo("left",layer,map)) {
-                    this.moveLeft();
-                }
-            }
-        }
 }
 
 fantome.prototype.moveUp = function(){
