@@ -1,3 +1,5 @@
+"use strict";
+
 //constructeur de l'objet fantome
 var fantome = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
@@ -12,6 +14,9 @@ var fantome = function(game,layer,x,y){
   //position du fantome
   this.x = x;
   this.y = y;
+
+  this.tile_x = null;
+  this.tile_y = null;
 
   //calcul de la vitesse relative selon les axes X et Y
   this.relativeSpeed = 0;
@@ -28,9 +33,13 @@ var fantome = function(game,layer,x,y){
   this.walkables = walkables;
   this.findPath = setInterval(function(){
     this.pathfinder.setCallbackFunction(function(path) {
-      if(path != null){
+      if(path === null){
+        console.log("La destination n'a pu être trouvée");
+        console.log(this.tile_x);
+        console.log(this.tile_y);
+      } else {
         for (var i = 0, ilen = path.length; i < ilen; i++) {
-            this.map.putTile(46, path[i].x, path[i].y);
+            (this.map).putTile(46, path[i].x, path[i].y);
         }
 
         var goToX = path[1].x * 25;
@@ -53,6 +62,7 @@ var fantome = function(game,layer,x,y){
         }
       }
     });
+
     this.pathfinder.preparePathCalculation([this.tile_x,this.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
     this.pathfinder.calculatePath();
   });
@@ -124,10 +134,9 @@ fantome.prototype.update = function(){
     this.y = this.body.y;
     this.x = this.body.x;
 
-
     this.tile_x = Math.floor(this.x/25);
     this.tile_y = Math.floor(this.y/25);
 
-    console.log(this.relativeSpeed);
-
+    console.log(this.tile_x);
+    console.log(this.tile_y);
 }
