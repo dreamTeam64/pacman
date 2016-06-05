@@ -20,6 +20,7 @@ var map;
 var layer;
 var player;
 var fantomas;
+var flantomas;
 var tiles;
 var tileset;
 var cursors;
@@ -87,7 +88,7 @@ function create() {
 
     //INSTANCE DU FANTOME
     fantomas = new fantome(game,layer,200,200);
-
+    flantomas = new fantome(game,layer,25,25);
     PlacePoint();
 
     cursors = game.input.keyboard.createCursorKeys();

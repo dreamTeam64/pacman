@@ -31,41 +31,45 @@ var fantome = function(game,layer,x,y){
 
   this.pathfinder = pathfinder;
   this.walkables = walkables;
-  this.findPath = setInterval(function(){
+  this.findPath = function(){
+
+    var fant = this;
+
     this.pathfinder.setCallbackFunction(function(path) {
+      console.log(path);
       if(path === null){
         console.log("La destination n'a pu être trouvée");
-        console.log(this.tile_x);
-        console.log(this.tile_y);
+        console.log(fant.tile_x);
+        console.log(fant.tile_y);
       } else {
         for (var i = 0, ilen = path.length; i < ilen; i++) {
-            (this.map).putTile(46, path[i].x, path[i].y);
+          (fant.map).putTile(46, path[i].x, path[i].y);
         }
 
         var goToX = path[1].x * 25;
         var goToY = path[1].y * 25;
 
-        if (goToX > this.x) {
-          this.moveRight();
-        } else if (goToX < this.x){
-          this.moveLeft();
+        if (goToX > fant.x) {
+          fant.moveRight();
+        } else if (goToX < fant.x){
+          fant.moveLeft();
         } else {
-          this.speed_x = 0;
+          fant.speed_x = 0;
         }
 
-        if (goToY > this.y) {
-          this.moveDown();
-        } else if (goToY < this.y){
-          this.moveUp();
+        if (goToY > fant.y) {
+          fant.moveDown();
+        } else if (goToY < fant.y){
+          fant.moveUp();
         } else {
-          this.speed_y = 0;
+          fant.speed_y = 0;
         }
       }
     });
 
-    this.pathfinder.preparePathCalculation([this.tile_x,this.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
+    this.pathfinder.preparePathCalculation([fant.tile_x,fant.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
     this.pathfinder.calculatePath();
-  });
+  }
 
 }
 
@@ -136,7 +140,5 @@ fantome.prototype.update = function(){
 
     this.tile_x = Math.floor(this.x/25);
     this.tile_y = Math.floor(this.y/25);
-
-    console.log(this.tile_x);
-    console.log(this.tile_y);
+    this.findPath();
 }
