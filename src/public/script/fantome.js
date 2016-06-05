@@ -1,7 +1,8 @@
+"use strict";
+
 //constructeur de l'objet fantome
-fantome = function(game,layer,x,y){
+var fantome = function(game,layer,x,y){
   Phaser.Sprite.call(this,game,x,y,'greendy');
-  this.velocityPlayer = 50; //Definit la vitesse du -p-a-c-m-a-n- fantome du coup putain
   this.layer = layer;
   this.game = game;
 
@@ -14,24 +15,62 @@ fantome = function(game,layer,x,y){
   this.x = x;
   this.y = y;
 
+  this.tile_x = null;
+  this.tile_y = null;
+
   //calcul de la vitesse relative selon les axes X et Y
   this.relativeSpeed = 0;
 
   //les objets nécessaire
-  this.layer = layer;
+  this.layer = layerF;
+  this.map = mapF;
   this.game = game;
 
-  //pathfinder
-  this.actualTile = null;
+  game.add.existing(this);
+  game.physics.enable(this);
 
-  this.scale.setTo(1,1);
+  this.pathfinder = pathfinder;
+  this.walkables = walkables;
+  this.findPath = function(){
 
-  //this.animations.add('left', [6, 5, 4], 10, true);
-  //this.animations.add('right', [9, 8, 7], 10, true);
-  //this.animations.add('down', [3, 2, 1], 10, true);
-  //this.animations.add('up', [12, 11, 10], 10, true);
+    var fant = this;
 
-  //Permet d'éviter les conflits dans les décisions
+    this.pathfinder.setCallbackFunction(function(path) {
+      console.log(path);
+      if(path === null){
+        console.log("La destination n'a pu être trouvée");
+        console.log(fant.tile_x);
+        console.log(fant.tile_y);
+      } else {
+        for (var i = 0, ilen = path.length; i < ilen; i++) {
+          (fant.map).putTile(46, path[i].x, path[i].y);
+        }
+
+        var goToX = path[1].x * 25;
+        var goToY = path[1].y * 25;
+
+        if (goToX > fant.x) {
+          fant.moveRight();
+        } else if (goToX < fant.x){
+          fant.moveLeft();
+        } else {
+          fant.speed_x = 0;
+        }
+
+        if (goToY > fant.y) {
+          fant.moveDown();
+        } else if (goToY < fant.y){
+          fant.moveUp();
+        } else {
+          fant.speed_y = 0;
+        }
+      }
+    });
+
+    this.pathfinder.preparePathCalculation([fant.tile_x,fant.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
+    this.pathfinder.calculatePath();
+  }
+
 }
 
 //fantome hérite de l'objet Phaser.Sprite
@@ -62,54 +101,6 @@ fantome.prototype.isPlayerOnRight = function(){
   return (this.body.x < player.body.x);
 }
 
-fantome.prototype.chooseWay = function(layer,map){
-    var res;
-    //console.log(this.canGo("up",layer,map));
-    //console.log(this.canGo("down",layer,map));
-    if (this.canGo("up",layer,map)) {
-        this.moveUp();
-    }
-    // if (this.canGo("down",layer,map)) {
-    //     this.moveDown();
-    // }
-    if (this.playerIsAbove()) {
-        if (this.isPlayerOnRight()) {
-            //A droite
-            if (this.canGo("up",layer,map)) {
-                this.moveUp();
-            }
-            if (this.canGo("right",layer,map)) {
-                this.moveRight();
-            }
-        } else {
-            //A gauche
-                if (this.canGo("up",layer,map)) {
-                    this.moveUp();
-                }
-                if (this.canGo("left",layer,map)) {
-                    this.moveLeft();
-                }
-            }
-    } else
-    { //cas de !PlayerIsAbove()
-        if (this.isPlayerOnRight()) {
-            if (this.canGo("down",layer,map)) {
-                this.moveDown();
-            }
-            if (this.canGo("right",layer,map)) {
-                this.moveRight();
-            }
-            } else { //cas de !isPlayerOnRight()
-                if (this.canGo("down",layer,map)) {
-                    this.moveDown();
-                }
-                if (this.canGo("left",layer,map)) {
-                    this.moveLeft();
-                }
-            }
-        }
-}
-
 fantome.prototype.moveUp = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
   this.speed_y = -this.velocityPlayer; //-50
@@ -135,7 +126,7 @@ fantome.prototype.moveLeft = function(){
 }
 
 fantome.prototype.update = function(){
-
+    game.physics.arcade.collide(this, this.layer);
     //Mouvement du fantome en x et y
     this.body.velocity.x = this.speed_x;
     this.body.velocity.y = this.speed_y;
@@ -147,10 +138,7 @@ fantome.prototype.update = function(){
     this.y = this.body.y;
     this.x = this.body.x;
 
-
     this.tile_x = Math.floor(this.x/25);
     this.tile_y = Math.floor(this.y/25);
-
-    console.log(this.relativeSpeed);
-
+    this.findPath();
 }
