@@ -18,10 +18,44 @@ var fantome = function(game,layer,x,y){
 
   //les objets nécessaire
   this.layer = layerF;
+  this.map = mapF;
   this.game = game;
 
   game.add.existing(this);
   game.physics.enable(this);
+
+  this.pathfinder = pathfinder;
+
+  this.findPath = setInterval(function(){
+  this.pathfinder.setCallbackFunction(function(path) {
+    
+    for (var i = 0, ilen = path.length; i < ilen; i++) {
+        this.map.putTile(46, path[i].x, path[i].y);
+    }
+
+    var goToX = path[1].x * 25;
+    var goToY = path[1].y * 25;
+
+    if (goToX > this.x) {
+      this.moveRight();
+    } else if (goToX < this.x){
+      this.moveLeft();
+    } else {
+      this.speed_x = 0;
+    }
+
+    if (goToY > this.y) {
+      this.moveDown();
+    } else if (goToY < this.y){
+      this.moveUp();
+    } else {
+      this.speed_y = 0;
+    }
+
+  });
+  this.pathfinder.preparePathCalculation([this.tile_x,this.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
+  this.pathfinder.calculatePath();
+  });
 
 }
 

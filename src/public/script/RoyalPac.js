@@ -97,44 +97,6 @@ function create() {
     levelText = game.add.text(375,0,'current level: ', {fontSize: '24px', fill: '#111'});
     levelText.text = 'current level: '+ level;
     console.log(fantomas);
-    setInterval(function(){
-        pathfinder.setCallbackFunction(function(path) {
-        // console.log("Hellow Wordl");
-        // console.log(path[1].x);
-        // console.log(path[1].y);
-
-        for(var i = 0, ilen = path.length; i < ilen; i++) {
-            mapF.putTile(46, path[i].x, path[i].y);
-        }
-
-        var goToX = path[1].x * 25;
-        var goToY = path[1].y * 25;
-
-        // console.log("fantomas est en (" +fantomas.x + "," + fantomas.y+")");
-        // console.log("fantomas doit aller en (" +goToX + "," + goToY+")");
-
-        if (goToX > fantomas.x) {
-          fantomas.moveRight();
-        } else if (goToX < fantomas.x){
-          fantomas.moveLeft();
-        } else {
-          fantomas.speed_x = 0;
-        }
-
-        if (goToY > fantomas.y) {
-          fantomas.moveDown();
-        } else if (goToY < fantomas.y){
-          fantomas.moveUp();
-        } else {
-          fantomas.speed_y = 0;
-        }
-
-      });
-      pathfinder.preparePathCalculation([fantomas.tile_x,fantomas.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
-      pathfinder.calculatePath();
-
-      //mapF.layers[0].data = map.layers[0].data;
-    });
 }
 
 function canGo(direction, player, layer, map){
