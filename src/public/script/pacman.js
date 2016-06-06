@@ -16,7 +16,7 @@ var pacman = function(game,layer,x,y){
 
   this.relativeSpeed = 0;
 
-  this.velocityPlayer = 50;
+  this.velocityPlayer = 150;
 
   game.add.existing(this);
   game.physics.enable(this);
@@ -70,44 +70,44 @@ pacman.prototype.isStick = function(){
 }
 
 pacman.prototype.moveUp = function(){
-  this.speed_y = -this.velocityPlayer;
+  this.body.velocity.y = -this.velocityPlayer;
   //  Move to the left
   if (this.canGo('up')){
-    this.speed_y = -this.velocityPlayer;
-    this.speed_x = 0;
+    this.body.velocity.y = -this.velocityPlayer;
+    this.body.velocity.x = 0;
     this.animations.play('up');
     this.direction = 'up';
   }
 }
 
 pacman.prototype.moveDown = function(){
-  this.speed_y = this.velocityPlayer;
+  this.body.velocity.y = this.velocityPlayer;
   //  Move down
   if (this.canGo('down')){
-    this.speed_y = this.velocityPlayer;
-    this.speed_x = 0;
+    this.body.velocity.y = this.velocityPlayer;
+    this.body.velocity.x = 0;
     this.animations.play('down');
     this.direction = 'down';
   }
 }
 
 pacman.prototype.moveRight = function(){
-  this.speed_x = this.velocityPlayer;
+  this.body.velocity.x = this.velocityPlayer;
   //  Move to the right
   if (this.canGo('right')){
-    this.speed_x = this.velocityPlayer;
-    this.speed_y = 0;
+    this.body.velocity.x = this.velocityPlayer;
+    this.body.velocity.y = 0;
     this.animations.play('right');
     this.direction = 'right';
   }
 }
 
 pacman.prototype.moveLeft = function(){
-  this.speed_x = -this.velocityPlayer;
+  this.body.velocity.x = -this.velocityPlayer;
   //  Move to the left
   if (this.canGo('left')){
-    this.speed_x = -this.velocityPlayer;
-    this.speed_y = 0;
+    this.body.velocity.x = -this.velocityPlayer;
+    this.body.velocity.y = 0;
     this.animations.play('left');
     this.direction = 'left';
   }
@@ -115,11 +115,8 @@ pacman.prototype.moveLeft = function(){
 
 pacman.prototype.update = function(){
   game.physics.arcade.collide(this, this.layer);
-  //Mouvement du fantome en x et y
-  this.body.velocity.x = this.speed_x;
-  this.body.velocity.y = this.speed_y;
 
-  //formule de notre ami Pyhthagore, pour une fois que tu sert à quelque chose !
+  //formule de notre ami Pyhthagore, pour une fois que tu sers à quelque chose !
   this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
 
   //mise à jour des coordonnées de l'objet
