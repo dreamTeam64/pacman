@@ -54,6 +54,9 @@ pacman.prototype.canGo = function(direction) {
   }
 }
 
+/**
+  Cette fonction à t-elle une réelle utilité ?
+**/
 pacman.prototype.isStick = function(){
   // + vaut'il un ET Logique ?
   var caPasse = this.canGo('left') + this.canGo('right') + this.canGo('up') + this.canGo('down');
@@ -67,13 +70,13 @@ pacman.prototype.isStick = function(){
 }
 
 pacman.prototype.moveUp = function(){
-  this.speed_x = -this.velocityPlayer;
+  this.speed_y = -this.velocityPlayer;
   //  Move to the left
   if (this.canGo('left')){
-    this.speed_x = -this.velocityPlayer;
-    this.speed_y = 0;
-    this.animations.play('left');
-    this.direction = 'left';
+    this.speed_y = -this.velocityPlayer;
+    this.speed_x = 0;
+    this.animations.play('up');
+    this.direction = 'up';
   }
 }
 
