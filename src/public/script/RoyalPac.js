@@ -32,10 +32,10 @@ var scoreText;
 var howLeft=1;
 var level =1;
 var levelText;
-var life=3;
+var life=1;
 var lifeText;
-
-var velocityPlayer = 200; //Definit la vitesse du joueur
+var enemies;
+// var velocityPlayer = 200; //Definit la vitesse du joueur
 
 var blocked = false;
 var pathfinder;
@@ -77,8 +77,11 @@ function create() {
     // console.log(pathfinder);
 
     //INSTANCE DU FANTOME
-    fantomas = new fantome(game,layer,200,200);
-    flantomas = new fantome(game,layer,25,25);
+    enemies = game.add.group();
+    fantomas = new fantome(game,layer,200,200,200,200);
+    flantomas = new fantome(game,layer,25,25,25,25);
+    enemies.add(fantomas);
+    enemies.add(flantomas);
     PlacePoint();
 
     cursors = game.input.keyboard.createCursorKeys();
@@ -216,11 +219,52 @@ function MovementHandler(){
     }
 }
 
+function freezeTime(time) { //time in seconds
+    var seconds;
+    seconds = time * 1000;
+    game.paused = true;
+    setTimeout(function(){game.paused = false;},seconds);
+}
+
+function Death(player,enemies) {
+    // Todo: play animation of death
+    //
+    life--;
+    console.log(enemies.respawnX);
+    enemies.body.x = 200;
+    enemies.body.y = 200; //OR enemies.respawnX or Y
+    if (life>=0) {
+        lifeText.text = 'Remaining Lives: ' + life;
+        freezeTime(1);
+    }
+    else {
+        // En faisant ça j'ai eu une putain d'idée (mais on fera ça à la toute fin ahah). L'idée c'est que quand on meurt dans l'écran
+        // game over, on revoit la game !!
+        
+        //ToDo: Recreate map
+        //      The "click to restart" function
+
+        game.add.text(w-725, h -450, 'GAME OVER !', { fontSize: '100px', fill: '#FFFF00' })
+        game.add.text(w-600, h -50, 'Click to restart', { fontSize: '50px', fill: '#FFFF00' })
+        game.paused = true;
+        score = 0;
+        scoreText.text = 'Score: ' + score;
+        level = 1;
+        levelText.text = 'Current Level: ' + level;
+        howLeft = 1;
+        life = 3;
+        lifeText.text = 'Remaining Lives: ' + life;
+        game.paused = false;
+    }
+}
+
 function update() {
   game.physics.arcade.overlap(player, points, function(player,points){
     Scoring(player,points);
   }, null, this);
-
+  game.physics.arcade.overlap(player, enemies, function(player,enemies){
+    Death(player,enemies);
+  }, null, this);
   MovementHandler();
   Reset(howLeft);
 }

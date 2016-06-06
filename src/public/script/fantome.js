@@ -1,7 +1,7 @@
 "use strict";
 
 //constructeur de l'objet fantome
-var fantome = function(game,layer,x,y){
+var fantome = function(game,layer,x,y,respawnX,respawnY){
   Phaser.Sprite.call(this,game,x,y,'greendy');
   this.layer = layer;
   this.game = game;
@@ -14,6 +14,9 @@ var fantome = function(game,layer,x,y){
   //position du fantome
   this.x = x;
   this.y = y;
+
+  this.respawnX = respawnX;
+  this.respawnY = respawnY;
 
   this.tile_x = null;
   this.tile_y = null;
