@@ -16,7 +16,7 @@ var pacman = function(game,layer,x,y){
 
   this.relativeSpeed = 0;
 
-  this.velocityPlayer = 150;
+  this.velocityPlayer = 40;
 
   game.add.existing(this);
   game.physics.enable(this);
@@ -114,7 +114,7 @@ pacman.prototype.moveLeft = function(){
 }
 
 pacman.prototype.update = function(){
-  game.physics.arcade.collide(this, this.layer);
+  game.physics.arcade.collide(this,layer);
 
   //formule de notre ami Pyhthagore, pour une fois que tu sers à quelque chose !
   this.relativeSpeed = Math.sqrt(Math.pow(Math.abs(this.body.x - this.x),2) + Math.pow(Math.abs(this.body.y - this.y),2));
@@ -125,4 +125,17 @@ pacman.prototype.update = function(){
 
   this.tile_x = Math.floor(this.x/25);
   this.tile_y = Math.floor(this.y/25);
+
+  if (cursors.left.isDown){
+      this.moveLeft();
+  }
+  if (cursors.right.isDown){
+      this.moveRight();
+  }
+  if (cursors.up.isDown){
+      this.moveUp();
+  }
+  if (cursors.down.isDown){
+      this.moveDown();
+  }
 }

@@ -1,4 +1,3 @@
-
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update
 });
 
@@ -240,7 +239,7 @@ function Death(player,enemies) {
     else {
         // En faisant ça j'ai eu une putain d'idée (mais on fera ça à la toute fin ahah). L'idée c'est que quand on meurt dans l'écran
         // game over, on revoit la game !!
-        
+
         //ToDo: Recreate map
         //      The "click to restart" function
 
