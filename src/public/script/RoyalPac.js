@@ -58,28 +58,12 @@ function initPlayerLayerMap(){
   map.setCollision(69);
 }
 
-function initPlayerProperties(){
-  player.body.collideWorldBounds = true;
-  player.animations.add('left', [6, 5, 4], 10, true);
-  player.animations.add('right', [9, 8, 7], 10, true);
-  player.animations.add('down', [3, 2, 1], 10, true);
-  player.animations.add('up', [12, 11, 10], 10, true);
-}
-
 function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     //Initialisation de la vue pour les fantomes
     initFantomLayerMap();
     //Création Map
     initPlayerLayerMap();
-
-    /**
-      //Ajout du player et init
-      player = game.add.sprite(375,375,'pacman');
-      game.physics.enable(player);
-      initPlayerProperties();
-    **/
-
     player = new pacman(game,layer,375,375);
 
     //gestion du pathfinder
@@ -164,18 +148,9 @@ function MovementHandler(){
 }
 
 function update() {
-  //console.log(pathfinder);
-  game.physics.arcade.collide(player, layer);
-
-  game.physics.arcade.collide(fantome, layer);
-  game.physics.arcade.collide(fantomas, layerF);
-
-
   game.physics.arcade.overlap(player, points, function(player,points){
     Scoring(player,points);
   }, null, this);
-
-  //isStick(player,layer,map);
 
   MovementHandler();
   Reset(howLeft);

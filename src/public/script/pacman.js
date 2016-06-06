@@ -23,6 +23,11 @@ var pacman = function(game,layer,x,y){
 
   this.direction = null;
 
+  this.body.collideWorldBounds = true;
+  this.animations.add('left', [6, 5, 4], 10, true);
+  this.animations.add('right', [9, 8, 7], 10, true);
+  this.animations.add('down', [3, 2, 1], 10, true);
+  this.animations.add('up', [12, 11, 10], 10, true);
 }
 
 //Pacman hérite des prop et methodes de Phaser.Sprite
