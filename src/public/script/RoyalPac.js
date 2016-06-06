@@ -13,9 +13,11 @@ function preload() {
     game.load.spritesheet('reddit','../assets/reddit.png',25,25,4);
     game.load.spritesheet('yellowStone','../assets/yellowStone.png',25,25,4);
     game.load.spritesheet('diamond','../assets/diamond.png',25,25,4);
+    game.load.image('menu', '../assets/PauseMenu/PauseMenu.png', 800 , 600);
 }
 
 /* Déclaration des variables globales au jeu */
+var w = 800, h = 600; //taille du canvas
 var map;
 var layer;
 var player;
@@ -82,6 +84,69 @@ function create() {
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
     levelText = game.add.text(375,0,'current level: ', {fontSize: '24px', fill: '#111'});
     levelText.text = 'current level: '+ level;
+
+    PauseMenu();
+}
+
+
+//Ok j'avoue j'ai cc/cp le code du tuto de phaser ahah
+function PauseMenu(){
+    var pause_label = game.add.text(w -80, 0, 'Pause', { font: '24px Arial', fill: '#000' });
+    pause_label.inputEnabled = true;
+    pause_label.events.onInputUp.add(function () {
+        // When the pause button is pressed, we pause the game
+        game.paused = true;
+
+        // Then add the menu
+        menu = game.add.sprite(w/2, h/2, 'menu');
+        menu.anchor.setTo(0.5, 0.5);
+
+        // And a label to illustrate which menu item was chosen. (This is not necessary)
+        choiseLabel = game.add.text(w/2, h -50, 'Click to continue', { font: '50px Arial', fill: '#FF0000' });
+        choiseLabel.anchor.setTo(0.5, 0.5);
+    });
+
+    // Add a input listener that can help us return from being paused
+    game.input.onDown.add(unpause, self);
+
+    // And finally the method that handels the pause menu
+    function unpause(event){
+        // Only act if paused
+        if(game.paused){
+
+        //Si on ajoute des items dans le menu c'est ca qu'il faut faire
+
+            // Calculate the corners of the menu
+            var x1 = w/2 - 0/2, x2 = w/2 + 0/2,
+                y1 = h/2 - 0/2, y2 = h/2 + 0/2;
+
+            // Check if the click was inside the menu
+            if(event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2 ){
+            /*
+                // The choicemap is an array that will help us see which item was clicked
+                var choisemap = ['one', 'two', 'three', 'four', 'five', 'six'];
+
+                // Get menu local coordinates for the click
+                var x = event.x - x1,
+                    y = event.y - y1;
+
+                // Calculate the choice
+                var choise = Math.floor(x / 90) + 3*Math.floor(y / 90);
+
+                // Display the choice
+                choiseLabel.text = 'You chose menu item: ' + choisemap[choise];
+            */
+            }
+            else{
+                // Remove the menu and the label
+                menu.destroy();
+                choiseLabel.destroy();
+
+                // Unpause the game
+                game.paused = false;
+            }
+        }
+    };
 }
 
 function PlacePoint(){
