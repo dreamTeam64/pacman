@@ -73,12 +73,14 @@ function create() {
     //Création Map
     initPlayerLayerMap();
 
-    //Ajout du player et init
-    player = game.add.sprite(375,375,'pacman');
-    game.physics.enable(player);
-    initPlayerProperties();
+    /**
+      //Ajout du player et init
+      player = game.add.sprite(375,375,'pacman');
+      game.physics.enable(player);
+      initPlayerProperties();
+    **/
 
-    //superPoint = game.add.sprite(375,375,'diamond');
+    player = new pacman(game,layer,375,375);
 
     //gestion du pathfinder
     walkables = [136];//définition des tiles où l'on peut marcher
@@ -96,35 +98,6 @@ function create() {
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
     levelText = game.add.text(375,0,'current level: ', {fontSize: '24px', fill: '#111'});
     levelText.text = 'current level: '+ level;
-    console.log(fantomas);
-}
-
-function canGo(direction, player, layer, map){
-    //player.body.velocity.x = 0;
-    //player.body.velocity.y = 0;
-    if (direction == 'down') {
-        return((map.getTileWorldXY(player.position.x + 24, player.position.y + 25, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y +25, 25, 25, layer).index == 136)); //down
-    }
-    if (direction == 'up') {
-        return((map.getTileWorldXY(player.position.x + 24, player.position.y - 1, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x, player.position.y - 1, 25, 25, layer).index == 136)); //up
-    }
-    if (direction == 'right'){
-        return((map.getTileWorldXY(player.position.x + 25, player.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x + 25, player.position.y, 25, 25, layer).index == 136)); //right
-    }
-    if (direction == 'left') {
-        return((map.getTileWorldXY(player.position.x - 1, player.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(player.position.x - 1, player.position.y, 25, 25, layer).index == 136)); //left
-    }
-}
-
-function isStick(player,layer,map){
-
-    var caPasse = canGo('left',player,layer,map) + canGo('right',player,layer,map) + canGo('up',player,layer,map) + canGo('down',player,layer,map);
-    if (caPasse) {
-        return false;
-    }
-    else {
-        return true;
-    }
 }
 
 function PlacePoint(){
@@ -177,52 +150,24 @@ function Scoring(player,Point) {
 
 function MovementHandler(){
     if (cursors.left.isDown){
-        player.body.velocity.x = -velocityPlayer;
-        //  Move to the left
-        if (canGo('left',player,layer,map)){
-          player.body.velocity.x = -velocityPlayer;
-          player.body.velocity.y = 0;
-          player.animations.play('left');
-          player.direction = 'left';
-        }
+        player.moveLeft();
     }
     if (cursors.right.isDown){
-        player.body.velocity.x = velocityPlayer;
-        //  Move to the right
-        if (canGo('right',player,layer,map)){
-          player.body.velocity.x = velocityPlayer;
-          player.body.velocity.y = 0;
-          player.animations.play('right');
-          player.direction = 'right';
-        }
+        player.moveRight();
     }
     if (cursors.up.isDown){
-        player.body.velocity.y = -velocityPlayer;
-        //  Move up
-        if (canGo('up',player,layer,map)){
-          player.body.velocity.y = -velocityPlayer;
-          player.body.velocity.x = 0;
-          player.animations.play('up');
-          player.direction = 'up';
-        }
+        player.moveUp();
     }
     if (cursors.down.isDown){
-        player.body.velocity.y = velocityPlayer;
-        //  Move down
-        if (canGo('down',player,layer,map)){
-          player.body.velocity.y = velocityPlayer;
-          player.body.velocity.x = 0;
-          player.animations.play('down');
-          player.direction = 'down';
-        }
+        player.moveDown();
     }
 }
 
 function update() {
   //console.log(pathfinder);
   game.physics.arcade.collide(player, layer);
+
   game.physics.arcade.collide(fantome, layer);
-  //console.log(layerF);
   game.physics.arcade.collide(fantomas, layerF);
 
 

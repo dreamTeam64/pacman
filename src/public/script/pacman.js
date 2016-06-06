@@ -1,4 +1,7 @@
+"use strict";
+
 var pacman = function(game,layer,x,y){
+  Phaser.Sprite.call(this,game,x,y,'pacman');
   this.game = game;
   this.layer = layer;
 
@@ -18,23 +21,50 @@ var pacman = function(game,layer,x,y){
   game.add.existing(this);
   game.physics.enable(this);
 
+  this.direction = null;
+
 }
 
+//Pacman hérite des prop et methodes de Phaser.Sprite
 pacman.prototype = Object.create(Phaser.Sprite.prototype);
 pacman.prototype.constructor = pacman;
 
-pacman.prototype.canGo = function() {
-
+/**
+  layer et map on un scope global donc pas de passage en param
+  player vaut 'this' donc au final on passe rien en param ! Ca c'est du code propre !
+  return un boolean
+**/
+pacman.prototype.canGo = function(direction) {
+  if (direction == 'down') {
+      return((map.getTileWorldXY(this.position.x + 24, this.position.y + 25, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x, this.position.y +25, 25, 25, layer).index == 136)); //down
+  }
+  if (direction == 'up') {
+      return((map.getTileWorldXY(this.position.x + 24, this.position.y - 1, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x, this.position.y - 1, 25, 25, layer).index == 136)); //up
+  }
+  if (direction == 'right'){
+      return((map.getTileWorldXY(this.position.x + 25, this.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x + 25, this.position.y, 25, 25, layer).index == 136)); //right
+  }
+  if (direction == 'left') {
+      return((map.getTileWorldXY(this.position.x - 1, this.position.y + 24, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x - 1, this.position.y, 25, 25, layer).index == 136)); //left
+  }
 }
 
 pacman.prototype.isStick = function(){
+  // + vaut'il un ET Logique ?
+  var caPasse = this.canGo('left') + this.canGo('right') + this.canGo('up') + this.canGo('down');
 
+  if (caPasse) {
+      return false;
+  }
+  else {
+      return true;
+  }
 }
 
 pacman.prototype.moveUp = function(){
   this.speed_x = -this.velocityPlayer;
   //  Move to the left
-  if (this.canGo('left',this,this.layer,this.map)){
+  if (this.canGo('left')){
     this.speed_x = -this.velocityPlayer;
     this.speed_y = 0;
     this.animations.play('left');
@@ -45,7 +75,7 @@ pacman.prototype.moveUp = function(){
 pacman.prototype.moveDown = function(){
   this.speed_y = this.velocityPlayer;
   //  Move down
-  if (this.canGo('down',this,this.layer,this.map)){
+  if (this.canGo('down')){
     this.speed_y = this.velocityPlayer;
     this.speed_x = 0;
     this.animations.play('down');
@@ -56,7 +86,7 @@ pacman.prototype.moveDown = function(){
 pacman.prototype.moveRight = function(){
   this.speed_x = this.velocityPlayer;
   //  Move to the right
-  if (thiscanGo('right',this,this.layer,this.map)){
+  if (this.canGo('right')){
     this.speed_x = this.velocityPlayer;
     this.speed_y = 0;
     this.animations.play('right');
@@ -67,7 +97,7 @@ pacman.prototype.moveRight = function(){
 pacman.prototype.moveLeft = function(){
   this.speed_x = -this.velocityPlayer;
   //  Move to the left
-  if (thiscanGo('left',this,this.layer,this.map)){
+  if (this.canGo('left')){
     this.speed_x = -this.velocityPlayer;
     this.speed_y = 0;
     this.animations.play('left');

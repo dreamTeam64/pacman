@@ -36,7 +36,6 @@ var fantome = function(game,layer,x,y){
     var fant = this;
 
     this.pathfinder.setCallbackFunction(function(path) {
-      console.log(path);
       if(path === null){
         console.log("La destination n'a pu être trouvée");
         console.log(fant.tile_x);
