@@ -32,6 +32,8 @@ var scoreText;
 var howLeft=1;
 var level =1;
 var levelText;
+var life=3;
+var lifeText;
 
 var velocityPlayer = 200; //Definit la vitesse du joueur
 
@@ -81,10 +83,11 @@ function create() {
 
     cursors = game.input.keyboard.createCursorKeys();
 
-    scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
-    levelText = game.add.text(375,0,'current level: ', {fontSize: '24px', fill: '#000'});
-    levelText.text = 'current level: '+ level;
-
+    scoreText = game.add.text(0,0,'Score: 0', {fontSize: '24px', fill: '#000'});
+    levelText = game.add.text(500,0,'Current Level: ', {fontSize: '24px', fill: '#000'});
+    levelText.text = 'Current Level: '+ level;
+    lifeText = game.add.text(200,0,'Remaining Lives: ', {fontSize: '24px', fill: '#000'});
+    lifeText.text = 'Remaining Lives: ' + life;
     PauseMenu();
 }
 
@@ -194,7 +197,7 @@ function Reset(howLeft){ // Todo: Freeze Time + animation of replacing points
 function Scoring(player,Point) {
     Point.kill(); //Enlever l'étoile
     score += 10;
-    scoreText.text = 'score: '+ score;
+    scoreText.text = 'Score: '+ score;
     howLeft=howLeft-10;
 }
 
