@@ -16,7 +16,7 @@ var pacman = function(game,layer,x,y){
 
   this.relativeSpeed = 0;
 
-  this.velocityPlayer = 30;
+  this.velocityPlayer = 50;
 
   game.add.existing(this);
   game.physics.enable(this);
@@ -72,7 +72,7 @@ pacman.prototype.isStick = function(){
 pacman.prototype.moveUp = function(){
   this.speed_y = -this.velocityPlayer;
   //  Move to the left
-  if (this.canGo('left')){
+  if (this.canGo('up')){
     this.speed_y = -this.velocityPlayer;
     this.speed_x = 0;
     this.animations.play('up');
