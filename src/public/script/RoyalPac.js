@@ -82,7 +82,7 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
 
     scoreText = game.add.text(0,0,'score: 0', {fontSize: '24px', fill: '#000'});
-    levelText = game.add.text(375,0,'current level: ', {fontSize: '24px', fill: '#111'});
+    levelText = game.add.text(375,0,'current level: ', {fontSize: '24px', fill: '#000'});
     levelText.text = 'current level: '+ level;
 
     PauseMenu();
@@ -91,7 +91,7 @@ function create() {
 
 //Ok j'avoue j'ai cc/cp le code du tuto de phaser ahah
 function PauseMenu(){
-    var pause_label = game.add.text(w -80, 0, 'Pause', { font: '24px Arial', fill: '#000' });
+    var pause_label = game.add.text(w -80, 0, 'Pause', { fontSize: '24px', fill: '#000' });
     pause_label.inputEnabled = true;
     pause_label.events.onInputUp.add(function () {
         // When the pause button is pressed, we pause the game
@@ -102,7 +102,7 @@ function PauseMenu(){
         menu.anchor.setTo(0.5, 0.5);
 
         // And a label to illustrate which menu item was chosen. (This is not necessary)
-        choiseLabel = game.add.text(w/2, h -50, 'Click to continue', { font: '50px Arial', fill: '#FF0000' });
+        choiseLabel = game.add.text(w/2, h -50, 'Click to continue', { fontSize: '50px', fill: '#FFFF00' });
         choiseLabel.anchor.setTo(0.5, 0.5);
     });
 
@@ -117,7 +117,7 @@ function PauseMenu(){
         //Si on ajoute des items dans le menu c'est ca qu'il faut faire
 
             // Calculate the corners of the menu
-            var x1 = w/2 - 0/2, x2 = w/2 + 0/2,
+            var x1 = w/2 - 0/2, x2 = w/2 + 0/2, //à la place des 0/2 mettre la position des items
                 y1 = h/2 - 0/2, y2 = h/2 + 0/2;
 
             // Check if the click was inside the menu
@@ -159,9 +159,9 @@ function PlacePoint(){
     var i=0;
     var j=0;
     var GrosPoint;
-    do {
-        GrosPoint = Math.floor((Math.random() * 25));
-    }while ((map.getTile(GrosPoint,GrosPoint,layer,true).index!=136)||(map.getTile(GrosPoint,GrosPoint,layer,true).index==1)||(map.getTile(GrosPoint,GrosPoint,layer,true).index==69));
+    // do {
+        GrosPoint = 30; //Math.floor((Math.random() * 25));
+    // }while (map.getTile(GrosPoint,GrosPoint,layer,true).index!=136);
 
     for (i = 0; i < 31; i++) {
             for (j = 0; j < 24; j++) {
