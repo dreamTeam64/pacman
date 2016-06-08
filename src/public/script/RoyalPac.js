@@ -203,21 +203,6 @@ function Scoring(player,Point) {
     howLeft=howLeft-10;
 }
 
-function MovementHandler(){
-    if (cursors.left.isDown){
-        player.moveLeft();
-    }
-    if (cursors.right.isDown){
-        player.moveRight();
-    }
-    if (cursors.up.isDown){
-        player.moveUp();
-    }
-    if (cursors.down.isDown){
-        player.moveDown();
-    }
-}
-
 function freezeTime(time) { //time in seconds
     var seconds;
     seconds = time * 1000;

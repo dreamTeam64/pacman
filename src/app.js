@@ -37,3 +37,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 server.listen(8080);
+
+process.on('exit', function(){
+  console.log("arret du serveur");
+});
