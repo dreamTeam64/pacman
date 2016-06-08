@@ -31,7 +31,7 @@ var scoreText;
 var howLeft=1;
 var level =1;
 var levelText;
-var life=1;
+var life=3;
 var lifeText;
 var enemies;
 // var velocityPlayer = 200; //Definit la vitesse du joueur
