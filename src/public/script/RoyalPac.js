@@ -249,6 +249,5 @@ function update() {
   game.physics.arcade.overlap(player, enemies, function(player,enemies){
     Death(player,enemies);
   }, null, this);
-  MovementHandler();
   Reset(howLeft);
 }
