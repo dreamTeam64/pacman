@@ -215,8 +215,8 @@ function Death(player,enemies) {
     //
     life--;
     console.log(enemies.respawnX);
-    enemies.body.x = 200;
-    enemies.body.y = 200; //OR enemies.respawnX or Y
+    enemies.body.x = 300; //Normalement les fantomes ils respawn pas comme ca ils retournent à leurs base tout seul comme des gaillards
+    enemies.body.y = 300; //OR enemies.respawnX or Y
     if (life>=0) {
         lifeText.text = 'Remaining Lives: ' + life;
         freezeTime(1);
