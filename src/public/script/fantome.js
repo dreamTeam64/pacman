@@ -1,11 +1,16 @@
 "use strict";
-
-//constructeur de l'objet fantome
+/**
+*constructeur de l'objet fantome
+* @arg {Object} game
+* @arg {Object} layer
+* @arg {Number} x Définit la pos x à l'instant initial
+* @arg {Number} y Définit la pos y à l'instant initial
+* @arg {Number} respawnX Définit en X ou respawnera le fantome
+* @arg {Number} respawnY Définit en Y ou respawnera le fantome
+**/
 var fantome = function(game,layer,x,y,respawnX,respawnY){
   Phaser.Sprite.call(this,game,x,y,'greendy');
-  this.layer = layer;
-  this.game = game;
-  this.ate = false;
+  this.ate = false; //permet de définir si le fantome et en mode mangeable
   this.velocityPlayer = 30; //Definit la vitesse du joueur
 
   this.speed_x = 0; //vitesse horizontal
@@ -15,9 +20,11 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
   this.x = x;
   this.y = y;
 
+  //position du respawn
   this.respawnX = respawnX;
   this.respawnY = respawnY;
 
+  //position des tiles
   this.tile_x = null;
   this.tile_y = null;
 
@@ -25,8 +32,8 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
   this.relativeSpeed = 0;
 
   //les objets nécessaire
-  this.layer = layerF;
-  this.map = mapF;
+  this.layer = layerF; //layer pour permettre au fantome de bouger dans le chemin creer par le pathfinder
+  this.map = mapF; //map relative au fantomes
   this.game = game;
 
   game.add.existing(this);
@@ -78,8 +85,14 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
 //fantome hérite de l'objet Phaser.Sprite
 fantome.prototype = Object.create(Phaser.Sprite.prototype);
 fantome.prototype.constructor = fantome;
+/**
+* permet au fantome de vérifier autour de lui les passages
+* @param {String} direction permet de définir ou l'on veut check le passage
+* @param {Object} map Instance globale de la map
+* @param {Object} layer Instance globale du layer
 
-//permet au fantome de vérifier autour de lui les passages
+* @return {boolean} Si le fantome peut passer dans la direction donnée
+**/
 fantome.prototype.canGo = function(direction, layer, map){
   if (direction == 'down') {
       return((map.getTileWorldXY(this.position.x + 24, this.position.y + 25, 25, 25, layer).index == 136) && (map.getTileWorldXY(this.position.x, this.position.y +25, 25, 25, layer).index == 136)); //down
@@ -95,38 +108,72 @@ fantome.prototype.canGo = function(direction, layer, map){
   }
 }
 
+/**
+* Verifier si le pacman est en dessous du fantome
+**/
 fantome.prototype.playerIsAbove = function(){
   return (this.body.y < player.body.y);
 }
 
+/**
+* Verifier si le pacman est à droite du fantome
+**/
 fantome.prototype.isPlayerOnRight = function(){
   return (this.body.x < player.body.x);
 }
 
+/**
+* permettre au fantome de bouger en haut
+* @param {Number} speed_y Vitesse du fantome selon l'axe y
+* @param {Number} speed_x Vitesse du fantome selon l'axe x
+* @param {Number} velocityPlayer vitesse absolue du joueur définie au départ
+**/
 fantome.prototype.moveUp = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
   this.speed_y = -this.velocityPlayer; //-50
   this.animations.play('up');
 }
 
+/**
+* permettre au fantome de bouger en bas
+* @param {Number} speed_y Vitesse du fantome selon l'axe y
+* @param {Number} speed_x Vitesse du fantome selon l'axe x
+* @param {Number} velocityPlayer vitesse absolue du joueur définie au départ
+**/
 fantome.prototype.moveDown = function(){
   this.speed_x = 0;//si il doit bouger en vertical on annule la vitesse horizontale
   this.speed_y = this.velocityPlayer; // 50
   this.animations.play('Down');
 }
 
+/**
+* permettre au fantome de bouger à Droite
+* @param {Number} speed_y Vitesse du fantome selon l'axe y
+* @param {Number} speed_x Vitesse du fantome selon l'axe x
+* @param {Number} velocityPlayer vitesse absolue du joueur définie au départ
+**/
 fantome.prototype.moveRight = function(){
   this.speed_y = 0;
   this.speed_x = this.velocityPlayer;
   this.animations.play('right');
 }
 
+/**
+* permettre au fantome de bouger à Gauche
+* @param {Number} speed_y Vitesse du fantome selon l'axe y
+* @param {Number} speed_x Vitesse du fantome selon l'axe x
+* @param {Number} velocityPlayer vitesse absolue du joueur définie au départ
+**/
 fantome.prototype.moveLeft = function(){
   this.speed_y = 0;
   this.speed_x = -this.velocityPlayer;
   this.animations.play('left');
 }
 
+/**
+*  fonction permettant au fantome de revenir à sa pos Initialisation
+*  @param {boolean} ate Etat du fantome
+**/
 fantome.prototype.BackHome = function () {
     game.add.text(300, 300, '.', { fontSize: '100px', fill: '#bd13be' });
     this.findPath(300, 300);
@@ -155,12 +202,13 @@ fantome.prototype.update = function(){
 
     this.tile_x = Math.floor(this.x/25);
     this.tile_y = Math.floor(this.y/25);
+
     if (!this.ate) {
         this.findPath(player.body.x, player.body.y);
-    }else {
+    } else {
         // setTimeout(function(){ //does not work (╯°□°）╯︵ ┻━┻)
-            this.ate = false;
-            // console.log("waiting");
+        this.ate = false;
+        // console.log("waiting");
         // },500);
     }
     game.physics.arcade.overlap(player, enemies, function(player,enemies){
