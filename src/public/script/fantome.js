@@ -5,7 +5,7 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
   Phaser.Sprite.call(this,game,x,y,'greendy');
   this.layer = layer;
   this.game = game;
-
+  this.ate = false;
   this.velocityPlayer = 30; //Definit la vitesse du joueur
 
   this.speed_x = 0; //vitesse horizontal
@@ -34,7 +34,7 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
 
   this.pathfinder = pathfinder;
   this.walkables = walkables;
-  this.findPath = function(){
+  this.findPath = function(playerX, playerY){
 
     var fant = this;
 
@@ -69,7 +69,7 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
       }
     });
 
-    this.pathfinder.preparePathCalculation([fant.tile_x,fant.tile_y], [Math.floor(player.body.x/25),Math.floor(player.body.y/25)]);
+    this.pathfinder.preparePathCalculation([fant.tile_x,fant.tile_y], [Math.floor(playerX/25),Math.floor(playerY/25)]);
     this.pathfinder.calculatePath();
   }
 
@@ -127,7 +127,20 @@ fantome.prototype.moveLeft = function(){
   this.animations.play('left');
 }
 
+fantome.prototype.BackHome = function () {
+    game.add.text(300, 300, '.', { fontSize: '100px', fill: '#bd13be' });
+    this.findPath(300, 300);
+    this.ate = true;
+    if ((this.x == 300)&&(this.y == 375)) {
+        game.add.text(300, 300, '.', { fontSize: '100px', fill: '#FFFF00' });
+        console.log("Im home bitches !");
+        // this.ate = false;
+    }
+}
+
 fantome.prototype.update = function(){
+    // console.log("X: " + this.x);
+    // console.log("Y: " + this.y);
     game.physics.arcade.collide(this, this.layer);
     //Mouvement du fantome en x et y
     this.body.velocity.x = this.speed_x;
@@ -142,5 +155,19 @@ fantome.prototype.update = function(){
 
     this.tile_x = Math.floor(this.x/25);
     this.tile_y = Math.floor(this.y/25);
-    this.findPath();
+    if (!this.ate) {
+        this.findPath(player.body.x, player.body.y);
+    }else {
+        // setTimeout(function(){ //does not work (╯°□°）╯︵ ┻━┻)
+            this.ate = false;
+            // console.log("waiting");
+        // },500);
+    }
+    game.physics.arcade.overlap(player, enemies, function(player,enemies){
+        this.BackHome();
+        setTimeout(function(){this.ate = false;
+            console.log("waiting");
+        },5000);
+    }, null, this);
+    console.log("this.ate = "+this.ate);
 }
