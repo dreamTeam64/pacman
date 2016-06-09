@@ -45,12 +45,14 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
 
     var fant = this;
 
+    /**
+    * @param {Array} path contient tous les checkpoints à passer pour arriver à destination 
+    **/
     this.pathfinder.setCallbackFunction(function(path) {
       if(path === null){
         console.log("La destination n'a pu être trouvée");
-        console.log(fant.tile_x);
-        console.log(fant.tile_y);
       } else {
+        //tracage du chemin
         for (var i = 0, ilen = path.length; i < ilen; i++) {
           (fant.map).putTile(46, path[i].x, path[i].y);
         }
@@ -58,6 +60,7 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
         var goToX = path[1].x * 25;
         var goToY = path[1].y * 25;
 
+        //le fantome se dirige vers le prochain checkPoint
         if (goToX > fant.x) {
           fant.moveRight();
         } else if (goToX < fant.x){
@@ -87,9 +90,9 @@ fantome.prototype = Object.create(Phaser.Sprite.prototype);
 fantome.prototype.constructor = fantome;
 /**
 * permet au fantome de vérifier autour de lui les passages
-* @param {String} direction permet de définir ou l'on veut check le passage
-* @param {Object} map Instance globale de la map
-* @param {Object} layer Instance globale du layer
+* @arg {String} direction permet de définir ou l'on veut check le passage
+* @arg {Object} map Instance globale de la map
+* @arg {Object} layer Instance globale du layer
 
 * @return {boolean} Si le fantome peut passer dans la direction donnée
 **/
@@ -113,7 +116,7 @@ fantome.prototype.canGo = function(direction, layer, map){
 **/
 fantome.prototype.playerIsAbove = function(){
   return (this.body.y < player.body.y);
-}
+}arg
 
 /**
 * Verifier si le pacman est à droite du fantome
@@ -186,8 +189,6 @@ fantome.prototype.BackHome = function () {
 }
 
 fantome.prototype.update = function(){
-    // console.log("X: " + this.x);
-    // console.log("Y: " + this.y);
     game.physics.arcade.collide(this, this.layer);
     //Mouvement du fantome en x et y
     this.body.velocity.x = this.speed_x;
@@ -211,11 +212,14 @@ fantome.prototype.update = function(){
         // console.log("waiting");
         // },500);
     }
+
     game.physics.arcade.overlap(player, enemies, function(player,enemies){
-        this.BackHome();
-        setTimeout(function(){this.ate = false;
-            console.log("waiting");
-        },5000);
+      this.BackHome();
+      setTimeout(function(){
+        this.ate = false;
+        console.log("waiting");
+      },5000);
     }, null, this);
+
     console.log("this.ate = "+this.ate);
 }
