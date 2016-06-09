@@ -130,14 +130,11 @@ function PauseMenu(){
             /*
                 // The choicemap is an array that will help us see which item was clicked
                 var choisemap = ['one', 'two', 'three', 'four', 'five', 'six'];
-
                 // Get menu local coordinates for the click
                 var x = event.x - x1,
                     y = event.y - y1;
-
                 // Calculate the choice
                 var choise = Math.floor(x / 90) + 3*Math.floor(y / 90);
-
                 // Display the choice
                 choiseLabel.text = 'You chose menu item: ' + choisemap[choise];
             */

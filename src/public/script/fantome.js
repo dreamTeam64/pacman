@@ -40,6 +40,9 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
 
     this.pathfinder.setCallbackFunction(function(path) {
       if(path === null){
+        console.log("La destination n'a pu être trouvée");
+        console.log(fant.tile_x);
+        console.log(fant.tile_y);
       } else {
         for (var i = 0, ilen = path.length; i < ilen; i++) {
           (fant.map).putTile(46, path[i].x, path[i].y);
