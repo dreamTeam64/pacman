@@ -31,7 +31,7 @@ var scoreText;
 var howLeft=1;
 var level =1;
 var levelText;
-var life=1;
+var life=3;
 var lifeText;
 var enemies;
 // var velocityPlayer = 200; //Definit la vitesse du joueur
@@ -215,11 +215,11 @@ function Death(player,enemies) {
     //
     life--;
     console.log(enemies.respawnX);
-    enemies.body.x = 200;
-    enemies.body.y = 200; //OR enemies.respawnX or Y
+    //enemies.findPath(300,300); //Normalement les fantomes ils respawn pas comme ca ils retournent à leurs base tout seul comme des gaillards
+    // enemies.body.y = 300; //OR enemies.respawnX or Y
     if (life>=0) {
         lifeText.text = 'Remaining Lives: ' + life;
-        freezeTime(1);
+        //freezeTime(1);
     }
     else {
         // En faisant ça j'ai eu une putain d'idée (mais on fera ça à la toute fin ahah). L'idée c'est que quand on meurt dans l'écran
@@ -228,8 +228,8 @@ function Death(player,enemies) {
         //ToDo: Recreate map
         //      The "click to restart" function
 
-        game.add.text(w-725, h -450, 'GAME OVER !', { fontSize: '100px', fill: '#FFFF00' })
-        game.add.text(w-600, h -50, 'Click to restart', { fontSize: '50px', fill: '#FFFF00' })
+        game.add.text(w-725, h -450, 'GAME OVER !', { fontSize: '100px', fill: '#FFFF00' });
+        game.add.text(w-600, h -50, 'Click to restart', { fontSize: '50px', fill: '#FFFF00' });
         game.paused = true;
         score = 0;
         scoreText.text = 'Score: ' + score;
