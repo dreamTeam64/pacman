@@ -181,10 +181,10 @@ fantome.prototype.BackHome = function () {
     game.add.text(300, 300, '.', { fontSize: '100px', fill: '#bd13be' });
     this.findPath(300, 300);
     this.ate = true;
-    if ((this.x == 300)&&(this.y == 375)) {
+    if ((this.x == 300)&&(this.y == -300)) {
         game.add.text(300, 300, '.', { fontSize: '100px', fill: '#FFFF00' });
         console.log("Im home bitches !");
-        // this.ate = false;
+        this.ate = false;
     }
 }
 
@@ -207,10 +207,10 @@ fantome.prototype.update = function(){
     if (!this.ate) {
         this.findPath(player.body.x, player.body.y);
     } else {
-        // setTimeout(function(){ //does not work (╯°□°）╯︵ ┻━┻)
-        this.ate = false;
+        setTimeout(function(){ //does not work (╯°□°）╯︵ ┻━┻)
+            this.ate = true;
         // console.log("waiting");
-        // },500);
+        },500);
     }
 
     game.physics.arcade.overlap(player, enemies, function(player,enemies){
