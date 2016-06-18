@@ -39,6 +39,8 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
   game.add.existing(this);
   game.physics.enable(this);
 
+  this.checkPoint = 1;
+  this.path = null;
   this.pathfinder = pathfinder;
   this.walkables = walkables;
   this.findPath = function(playerX, playerY){
@@ -46,7 +48,7 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
     var fant = this;
 
     /**
-    * @param {Array} path contient tous les checkpoints à passer pour arriver à destination 
+    * @param {Array} path contient tous les checkpoints à passer pour arriver à destination
     **/
     this.pathfinder.setCallbackFunction(function(path) {
       if(path === null){
@@ -56,26 +58,7 @@ var fantome = function(game,layer,x,y,respawnX,respawnY){
         for (var i = 0, ilen = path.length; i < ilen; i++) {
           (fant.map).putTile(46, path[i].x, path[i].y);
         }
-
-        var goToX = path[1].x * 25;
-        var goToY = path[1].y * 25;
-
-        //le fantome se dirige vers le prochain checkPoint
-        if (goToX > fant.x) {
-          fant.moveRight();
-        } else if (goToX < fant.x){
-          fant.moveLeft();
-        } else {
-          fant.speed_x = 0;
-        }
-
-        if (goToY > fant.y) {
-          fant.moveDown();
-        } else if (goToY < fant.y){
-          fant.moveUp();
-        } else {
-          fant.speed_y = 0;
-        }
+        this.path = path;
       }
     });
 
@@ -116,7 +99,7 @@ fantome.prototype.canGo = function(direction, layer, map){
 **/
 fantome.prototype.playerIsAbove = function(){
   return (this.body.y < player.body.y);
-}arg
+}
 
 /**
 * Verifier si le pacman est à droite du fantome
@@ -183,7 +166,7 @@ fantome.prototype.BackHome = function () {
     this.ate = true;
     if ((this.x == 300)&&(this.y == 375)) {
         game.add.text(300, 300, '.', { fontSize: '100px', fill: '#FFFF00' });
-        console.log("Im home bitches !");
+        console.log("I'm home bitches !");
         // this.ate = false;
     }
 }
@@ -204,8 +187,38 @@ fantome.prototype.update = function(){
     this.tile_x = Math.floor(this.x/25);
     this.tile_y = Math.floor(this.y/25);
 
+
     if (!this.ate) {
+      //on raffraichit le chemin si on arrive à destination ou si il n'est pas def
+      if((this.path == null) || (this.checkPoint == this.path.length)){
+        this.layer == layer;
         this.findPath(player.body.x, player.body.y);
+        //console.log(this.path);
+      } else {
+        if (this.x == this.path[this.checkPoint].x && this.y == this.path[this.checkPoint].y) {
+          this.checkPoint ++;
+        } else {
+          var goToX = path[this.checkPoint].x * 25;
+          var goToY = path[this.checkPoint].y * 25;
+
+          //le fantome se dirige vers le prochain checkPoint
+          if (goToX > this.x) {
+            this.moveRight();
+          } else if (goToX < this.x){
+            this.moveLeft();
+          } else {
+            this.speed_x = 0;
+          }
+
+          if (goToY > this.y) {
+            this.moveDown();
+          } else if (goToY < this.y){
+            this.moveUp();
+          } else {
+            this.speed_y = 0;
+          }
+        }
+      }
     } else {
         // setTimeout(function(){ //does not work (╯°□°）╯︵ ┻━┻)
         this.ate = false;
