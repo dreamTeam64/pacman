@@ -65,7 +65,8 @@ function create() {
     initFantomLayerMap();
     //Création Map
     initPlayerLayerMap();
-    player = new pacman(game,layer,375,375);
+    cursors = game.input.keyboard.createCursorKeys();
+    player = new pacman(game,layer,375,375,cursors);
 
     //gestion du pathfinder
     walkables = [136];//définition des tiles où l'on peut marcher
@@ -81,7 +82,6 @@ function create() {
     enemies.add(flantomas);
     PlacePoint();
 
-    cursors = game.input.keyboard.createCursorKeys();
 
     scoreText = game.add.text(0,0,'Score: 0', {fontSize: '24px', fill: '#000'});
     levelText = game.add.text(500,0,'Current Level: ', {fontSize: '24px', fill: '#000'});

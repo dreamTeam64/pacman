@@ -1,10 +1,10 @@
 "use strict";
 
-var pacman = function(game,layer,x,y){
+var pacman = function(game,layer,x,y,cursors){
   Phaser.Sprite.call(this,game,x,y,'pacman');
   this.game = game;
   this.layer = layer;
-
+  
   this.x = x;
   this.y = y;
 
